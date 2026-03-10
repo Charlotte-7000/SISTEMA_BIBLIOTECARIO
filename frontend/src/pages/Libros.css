@@ -1,253 +1,331 @@
+/* src/pages/Libros.css */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
 .libros-page {
+  font-family: 'Sora', sans-serif;
+  background: #f4f7fc;
   min-height: 100vh;
-  background: #f5f7fa;
+  color: #0b0f1a;
 }
 
-/* HEADER */
-.libros-header {
-  background: white;
-  border-bottom: 1px solid #eee;
-  padding: 0 2rem;
+/* ── Hero ── */
+.libros-hero {
+  background: linear-gradient(135deg, #07091a 0%, #0d1535 60%, #0a1628 100%);
+  padding: 40px 48px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.libros-breadcrumb {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 10px;
+}
+
+.libros-h1 {
+  font-family: 'Lora', serif;
+  font-size: 2rem; font-weight: 700;
+  color: #fff; margin: 0 0 8px; letter-spacing: -0.4px;
+}
+
+.libros-subtitle {
+  font-size: 13.5px; color: rgba(255,255,255,0.50); font-weight: 300;
+}
+
+.libros-usuario-pill {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 10px 16px;
+}
+
+.libros-usuario-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, #0057ff, #4f8bff);
+  color: #fff; font-weight: 700; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.libros-usuario-nombre {
+  display: block; font-size: 13px; font-weight: 600; color: #fff;
+}
+.libros-usuario-rol {
+  display: block; font-size: 10px; color: rgba(255,255,255,0.40);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* ── Notif ── */
+.libros-notif {
+  padding: 13px 48px; font-size: 13.5px; font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+}
+.libros-notif.ok  { background: #d1fae5; color: #065f46; border-bottom: 1px solid #6ee7b7; }
+.libros-notif.err { background: #fee2e2; color: #991b1b; border-bottom: 1px solid #fca5a5; }
+
+/* ── Filtros ── */
+.libros-filtros-wrap {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f2;
+  padding: 18px 48px;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 50;
+  box-shadow: 0 2px 12px rgba(11,15,26,0.05);
 }
 
-.libros-header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.logo-icon {
-  width: 36px;
-  height: 36px;
-  background: #1890ff;
-  color: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
-
-.logo-text {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #1a1a2e;
-}
-
-.libros-nav {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-item {
-  font-size: 0.95rem;
-  color: #666;
-  cursor: pointer;
-  padding: 0.25rem 0;
-}
-
-.nav-item.active {
-  color: #1890ff;
-  font-weight: 600;
-  border-bottom: 2px solid #1890ff;
-}
-
-.btn-outline {
-  padding: 0.45rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: white;
-  font-size: 0.9rem;
-  cursor: pointer;
-  color: #555;
-}
-
-.btn-outline:hover {
-  border-color: #1890ff;
-  color: #1890ff;
-}
-
-/* HERO */
-.libros-hero {
-  background: linear-gradient(135deg, #1890ff, #096dd9);
-  color: white;
-  text-align: center;
-  padding: 3rem 2rem;
-}
-
-.libros-titulo {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.libros-subtitulo {
-  font-size: 1rem;
-  opacity: 0.85;
-}
-
-/* FILTROS */
 .libros-filtros {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 2rem;
-  display: flex;
-  gap: 1rem;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
+
+.filtro-search-wrap {
+  flex: 1; min-width: 220px;
+  display: flex; align-items: center; gap: 10px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f2;
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.filtro-search-wrap:focus-within {
+  border-color: #0057ff;
+  box-shadow: 0 0 0 3px rgba(0,87,255,0.08);
+}
+.filtro-search-wrap svg { color: #94a3b8; flex-shrink: 0; }
 
 .filtro-input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  flex: 1; border: none; outline: none; background: transparent;
+  font-size: 13.5px; font-family: 'Sora', sans-serif; color: #0b0f1a;
+  padding: 11px 0;
 }
+.filtro-input::placeholder { color: #94a3b8; }
 
-.filtro-input:focus {
-  outline: none;
-  border-color: #1890ff;
+.filtro-clear {
+  background: none; border: none; color: #94a3b8;
+  cursor: pointer; font-size: 12px; padding: 2px 4px;
+  transition: color .15s;
 }
+.filtro-clear:hover { color: #0b0f1a; }
 
 .filtro-select {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  background: white;
-  min-width: 200px;
+  padding: 11px 14px;
+  border: 1.5px solid #e2e8f2; border-radius: 10px;
+  background: #f8fafc; font-size: 13.5px;
+  font-family: 'Sora', sans-serif; color: #334155;
+  min-width: 200px; cursor: pointer;
+  transition: border-color .15s;
+}
+.filtro-select:focus { outline: none; border-color: #0057ff; }
+
+.filtro-results { font-size: 12px; color: #94a3b8; margin-left: auto; white-space: nowrap; }
+
+/* ── Contenido ── */
+.libros-content {
+  max-width: 1280px; margin: 0 auto;
+  padding: 32px 48px 60px;
 }
 
-/* ESTADOS */
-.libros-error {
-  text-align: center;
-  padding: 3rem;
-  color: #ff4d4f;
-  font-size: 1rem;
+.libros-error-state {
+  display: flex; align-items: center; gap: 10px; justify-content: center;
+  padding: 40px; color: #dc2626; font-size: 14px;
 }
 
-.libros-cargando,
-.libros-vacio {
-  text-align: center;
-  padding: 3rem;
-  color: #888;
-  font-size: 1rem;
+.libros-loading {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 80px; gap: 16px; color: #94a3b8;
 }
+.libros-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid #e2e8f0; border-top-color: #0057ff;
+  border-radius: 50%; animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* GRID */
+.libros-empty {
+  text-align: center; padding: 80px 24px;
+  background: #fff; border-radius: 20px;
+  border: 1.5px dashed #c8d2e4;
+}
+.libros-empty-ico { font-size: 3.5rem; margin-bottom: 14px; }
+.libros-empty h3 { font-family: 'Lora', serif; font-size: 1.2rem; color: #0b0f1a; margin: 0 0 8px; }
+.libros-empty p  { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+.libros-empty-btn {
+  background: #0057ff; color: #fff; border: none;
+  border-radius: 10px; padding: 10px 24px;
+  font-size: 13px; font-weight: 600; font-family: 'Sora', sans-serif;
+  cursor: pointer; transition: background .15s;
+}
+.libros-empty-btn:hover { background: #0040cc; }
+
+/* ── Grid ── */
 .libros-grid {
-  max-width: 1200px;
-  margin: 0 auto 3rem;
-  padding: 0 2rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: 18px;
 }
 
-/* CARD */
+/* ── Card ── */
 .libro-card {
-  background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  background: #fff;
+  border: 1.5px solid #e2e8f2;
+  border-radius: 18px;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
+.libro-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(11,15,26,0.10);
+  border-color: transparent;
+}
+
+.libro-card-top { display: flex; }
 
 .libro-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  width: fit-content;
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 700;
 }
+.libro-badge.disponible { background: #d1fae5; color: #065f46; }
+.libro-badge.agotado    { background: #fee2e2; color: #991b1b; }
 
-.disponible {
-  background: #f6ffed;
-  color: #52c41a;
-  border: 1px solid #b7eb8f;
-}
-
-.agotado {
-  background: #fff2f0;
-  color: #ff4d4f;
-  border: 1px solid #ffccc7;
-}
-
-.libro-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  flex: 1;
-}
+.libro-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
 
 .libro-categoria {
-  font-size: 0.8rem;
-  color: #1890ff;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 9.5px; font-weight: 700; color: #0057ff;
+  text-transform: uppercase; letter-spacing: 2px;
 }
-
 .libro-titulo {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a1a2e;
-  line-height: 1.4;
+  font-family: 'Lora', serif; font-size: 1rem; font-weight: 700;
+  color: #0b0f1a; line-height: 1.3; margin: 4px 0 2px;
 }
-
 .libro-autor {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 12.5px; color: #64748b; font-style: italic;
+}
+.libro-desc {
+  font-size: 12px; color: #94a3b8; line-height: 1.55;
+  margin-top: 6px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.libro-isbn { font-size: 11px; color: #c8d2e4; margin-top: 4px; }
+
+/* ── Acciones ── */
+.libro-acciones { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+
+.btn-prestar {
+  width: 100%; padding: 10px;
+  background: #0057ff; color: #fff; border: none;
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  transition: background .15s, transform .15s;
+  box-shadow: 0 3px 12px rgba(0,87,255,0.25);
+}
+.btn-prestar:hover { background: #0040cc; transform: translateY(-1px); }
+
+.btn-apartar-outline {
+  width: 100%; padding: 9px;
+  background: #fff; color: #0057ff;
+  border: 1.5px solid #0057ff;
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  transition: background .15s;
+}
+.btn-apartar-outline:hover { background: #eff4ff; }
+
+.btn-apartar-agotado {
+  width: 100%; padding: 10px;
+  background: #f8fafc; color: #64748b;
+  border: 1.5px solid #e2e8f2;
+  border-radius: 10px; font-size: 12.5px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.btn-apartar-agotado:hover { background: #eff4ff; border-color: #0057ff; color: #0057ff; }
+
+/* ══ MODAL ══ */
+.libros-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(7,9,26,0.72);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.libros-modal {
+  background: #fff; border-radius: 24px;
+  padding: 40px 36px; max-width: 440px; width: 100%;
+  position: relative; text-align: center;
+  animation: slideUp .25s ease;
+  box-shadow: 0 24px 80px rgba(7,9,26,0.30);
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.libros-modal-x {
+  position: absolute; top: 16px; right: 18px;
+  background: #f1f5f9; border: none; border-radius: 50%;
+  width: 32px; height: 32px; font-size: 13px; color: #64748b;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.libros-modal-x:hover { background: #e2e8f0; }
+
+.libros-modal-ico  { font-size: 2.8rem; margin-bottom: 8px; }
+.libros-modal-pre  { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #0057ff; margin: 0 0 8px; }
+.libros-modal-titulo { font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 700; color: #0b0f1a; margin: 0 0 5px; line-height: 1.25; }
+.libros-modal-autor  { font-size: 13px; color: #64748b; font-style: italic; margin: 0 0 22px; }
+
+.libros-modal-info {
+  display: flex; background: #f8fafc;
+  border-radius: 12px; overflow: hidden;
+  margin-bottom: 18px; text-align: left;
+}
+.libros-modal-info-item { flex: 1; padding: 13px 15px; }
+.libros-modal-info-sep  { width: 1px; background: #e2e8f2; flex-shrink: 0; }
+.lmi-label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 4px; }
+.lmi-val   { display: block; font-size: 13px; font-weight: 700; color: #0b0f1a; }
+.lmi-val.green { color: #059669; }
+.lmi-val.red   { color: #dc2626; }
+
+.libros-modal-aviso {
+  background: #f8fafc; border-radius: 10px;
+  padding: 12px 15px; font-size: 12.5px;
+  color: #475569; line-height: 1.55; margin-bottom: 24px;
+  text-align: left; border: 1px solid #e2e8f2;
 }
 
-.libro-descripcion {
-  font-size: 0.85rem;
-  color: #888;
-  line-height: 1.5;
-}
+.libros-modal-btns { display: flex; flex-direction: column; gap: 8px; }
 
-.libro-isbn {
-  font-size: 0.8rem;
-  color: #aaa;
+.libros-btn-confirmar {
+  width: 100%; padding: 13px;
+  background: #0057ff; color: #fff; border: none;
+  border-radius: 10px; font-size: 14px; font-weight: 700;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  transition: background .15s;
+  box-shadow: 0 4px 16px rgba(0,87,255,0.3);
 }
+.libros-btn-confirmar:hover:not(:disabled) { background: #0040cc; }
+.libros-btn-confirmar:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; }
 
-.libro-acciones {
-  margin-top: auto;
+.libros-btn-cancel {
+  width: 100%; padding: 11px;
+  background: #fff; color: #64748b;
+  border: 1.5px solid #e2e8f2; border-radius: 10px;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  transition: border-color .15s, color .15s;
 }
+.libros-btn-cancel:hover { border-color: #94a3b8; color: #0b0f1a; }
 
-.btn-apartar {
-  width: 100%;
-  padding: 0.65rem;
-  background: #1890ff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-apartar:hover:not(:disabled) {
-  background: #096dd9;
-}
-
-.btn-apartar:disabled {
-  background: #f5f5f5;
-  color: #bbb;
-  cursor: not-allowed;
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .libros-hero         { padding: 28px 20px; }
+  .libros-filtros-wrap { padding: 14px 20px; }
+  .libros-content      { padding: 24px 16px 40px; }
+  .libros-notif        { padding: 12px 20px; }
+  .libros-grid         { grid-template-columns: 1fr; }
+  .libros-modal        { padding: 32px 20px; }
 }

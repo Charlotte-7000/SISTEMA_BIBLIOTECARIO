@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 interface FormLogin {
-  usuario_nombre_acceso: string;
+  matricula_id: string;
   usuario_password: string;
 }
 
 export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState<FormLogin>({
-    usuario_nombre_acceso: "",
+    matricula_id: "",
     usuario_password: "",
   });
   const [error, setError] = useState("");
@@ -37,7 +37,7 @@ export default function Login() {
         localStorage.setItem("usuario", JSON.stringify(data.usuario));
         navigate("/home");
       } else {
-        setError("Usuario o contraseña incorrectos.");
+        setError("Matrícula o contraseña incorrectos.");
       }
     } catch {
       setError("No se pudo conectar con el servidor.");
@@ -48,7 +48,6 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      {/* Panel izquierdo — imagen */}
       <div className="login-panel-img">
         <img
           src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=900&q=80"
@@ -67,29 +66,25 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Panel derecho — formulario */}
       <div className="login-panel-form">
         <div className="login-form-wrap">
-          {/* Logo móvil */}
           <div className="login-logo-mobile">
             <div className="login-logo-icon">B</div>
-            <span className="login-logo-text">Biblioteca BUAP</span>
+            <span className="login-logo-text">Biblioteca Web</span>
           </div>
 
           <h1 className="login-titulo">Iniciar sesión</h1>
-          <p className="login-subtitulo">
-            Ingresa con tu matrícula o nombre de usuario institucional
-          </p>
+          <p className="login-subtitulo">Ingresa con tu ID institucional y contraseña</p>
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label className="form-label">Usuario / Matrícula</label>
+              <label className="form-label">ID Institucional</label>
               <input
                 className="form-input"
                 type="text"
-                name="usuario_nombre_acceso"
+                name="matricula_id"
                 placeholder="Ej. 202312345"
-                value={form.usuario_nombre_acceso}
+                value={form.matricula_id}
                 onChange={handleChange}
                 required
                 autoComplete="username"
@@ -112,11 +107,7 @@ export default function Login() {
 
             {error && <p className="login-error">{error}</p>}
 
-            <button
-              type="submit"
-              className="btn-login"
-              disabled={cargando}
-            >
+            <button type="submit" className="btn-login" disabled={cargando}>
               {cargando ? "Verificando..." : "Entrar"}
             </button>
           </form>
@@ -131,7 +122,7 @@ export default function Login() {
           </p>
 
           <p className="login-nota">
-            Si olvidaste tu contraseña, acércate a la ventanilla de atención o contacta a soporte.
+            Si olvidaste tu contraseña, acércate a la ventanilla de atención.
           </p>
         </div>
       </div>

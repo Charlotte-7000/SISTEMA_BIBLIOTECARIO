@@ -6,6 +6,7 @@ interface Slide {
   image: string;
   headline: string;
   sub: string;
+  chip: string;
 }
 
 interface LibroDestacado {
@@ -35,17 +36,20 @@ const slides: Slide[] = [
   {
     image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1400&q=80",
     headline: "Descubre el conocimiento",
-    sub: " Títulos a tu alcance",
+    sub: "Miles de títulos a tu alcance, listos para explorar cuando los necesitas.",
+    chip: "Colección actualizada 2025",
   },
   {
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1400&q=80",
     headline: "Tu siguiente gran lectura",
-    sub: "Explora colecciones especializadas",
+    sub: "Explora colecciones especializadas por área de estudio.",
+    chip: "Más de 12,000 títulos",
   },
   {
     image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1400&q=80",
     headline: "Aprende sin límites",
-    sub: "Recursos digitales disponibles 24/7",
+    sub: "Recursos digitales disponibles para ti las 24 horas del día.",
+    chip: "Acceso digital 24/7",
   },
 ];
 
@@ -75,16 +79,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const t = setInterval(() => setCurrentSlide((p) => (p + 1) % slides.length), 5000);
+    const t = setInterval(() => setCurrentSlide((p) => (p + 1) % slides.length), 5500);
     return () => clearInterval(t);
   }, []);
 
-  const handleTramite = () => {
-    if (!usuario) {
-      navigate("/registro");
-    } else {
-      navigate("/libros");
-    }
+  // Navega a la ruta protegida o al login si no hay sesión
+  const irA = (ruta: string) => {
+    if (!usuario) navigate("/login");
+    else navigate(ruta);
   };
 
   const handleCerrarSesion = () => {
@@ -93,12 +95,18 @@ export default function Home() {
     setUsuario(null);
   };
 
+  const handleBuscar = () => {
+    if (search.trim()) navigate(`/libros?busqueda=${encodeURIComponent(search)}`);
+    else navigate("/libros");
+  };
+
   return (
     <div className="home-page">
 
-      {/* HEADER */}
+      {/* ══ HEADER ══ */}
       <header className="home-header">
         <div className="header-inner">
+
           <div className="logo-wrap" onClick={() => navigate("/")}>
             <div className="logo-icon">B</div>
             <span className="logo-text">Biblioteca WEB</span>
@@ -108,9 +116,8 @@ export default function Home() {
             <ul className="nav-list">
               <li className="nav-item active">Inicio</li>
               <li className="nav-item" onClick={() => navigate("/libros")}>Catálogo</li>
-              <li className="nav-item" onClick={handleTramite}>Préstamos</li>
-              <li className="nav-item" onClick={handleTramite}>Apartados</li>
-              <li className="nav-item">Ayuda</li>
+              <li className="nav-item" onClick={() => irA("/prestamos")}>Préstamos</li>
+              <li className="nav-item" onClick={() => irA("/apartados")}>Apartados</li>
             </ul>
           </nav>
 
@@ -120,91 +127,92 @@ export default function Home() {
                 <span className="usuario-bienvenida">
                   Hola, <strong>{usuario.usuario_nombre}</strong>
                 </span>
-                <button className="btn-outline" onClick={handleCerrarSesion}>
-                  Cerrar sesión
-                </button>
+                <button className="btn-outline" onClick={handleCerrarSesion}>Cerrar sesión</button>
+                <button className="btn-primary" onClick={() => navigate("/dashboard")}>Dashboard</button>
               </div>
             ) : (
               <div className="usuario-sesion">
-                <button className="btn-outline" onClick={() => navigate("/login")}>
-                  Iniciar sesión
-                </button>
-                <button className="btn-primary" onClick={() => navigate("/registro")}>
-                  Registrarse
-                </button>
+                <button className="btn-outline" onClick={() => navigate("/login")}>Iniciar sesión</button>
+                <button className="btn-primary" onClick={() => navigate("/registro")}>Registrarse</button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Barra de búsqueda */}
         <div className="search-bar">
           <div className="search-wrap">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" style={{ color: "var(--ink-40)", flexShrink: 0 }}>
+              <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
             </svg>
             <input
               className="search-input"
-              placeholder="Buscar por título, autor, ISBN..."
+              placeholder="Buscar por título, autor, ISBN…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
             />
+            <div className="search-divider" />
             <select className="search-select">
               <option>Todos</option>
               <option>Título</option>
               <option>Autor</option>
               <option>ISBN</option>
             </select>
-            <button className="search-btn">Buscar</button>
+            <button className="search-btn" onClick={handleBuscar}>Buscar</button>
           </div>
         </div>
       </header>
 
-      {/* HERO SLIDER */}
+      {/* ══ HERO ══ */}
       <section className="hero-section">
         {slides.map((slide, i) => (
-          <div
-            key={i}
-            className="slide"
-            style={{ opacity: i === currentSlide ? 1 : 0, zIndex: i === currentSlide ? 1 : 0 }}
-          >
+          <div key={i} className="slide" style={{ opacity: i === currentSlide ? 1 : 0, zIndex: i === currentSlide ? 1 : 0 }}>
             <img src={slide.image} alt={slide.headline} />
             <div className="slide-overlay" />
             <div className="slide-content">
+              <div className="slide-chip">
+                <span className="slide-chip-dot" />
+                {slide.chip}
+              </div>
               <h1 className="slide-headline">{slide.headline}</h1>
               <p className="slide-sub">{slide.sub}</p>
               <div className="slide-actions">
-                <button className="slide-cta" onClick={() => navigate("/libros")}>
-                  Explorar catálogo
-                </button>
+                <button className="slide-cta" onClick={() => navigate("/libros")}>Explorar catálogo</button>
                 {!usuario && (
-                  <button className="slide-cta-ghost" onClick={() => navigate("/registro")}>
-                    Crear cuenta
-                  </button>
+                  <button className="slide-cta-ghost" onClick={() => navigate("/registro")}>Crear cuenta</button>
+                )}
+                {usuario && (
+                  <button className="slide-cta-ghost" onClick={() => navigate("/prestamos")}>Mis préstamos</button>
                 )}
               </div>
             </div>
           </div>
         ))}
+
+        <div className="hero-stats">
+          {[{ num: "12,400+", label: "Títulos" }, { num: "320+", label: "Autores" }, { num: "4", label: "Áreas" }].map((s) => (
+            <div className="hero-stat-pill" key={s.label}>
+              <span className="hero-stat-num">{s.num}</span>
+              <span className="hero-stat-label">{s.label}</span>
+            </div>
+          ))}
+        </div>
+
         <div className="hero-dots">
           {slides.map((_, i) => (
-            <button
-              key={i}
-              className={`hero-dot${i === currentSlide ? " active" : ""}`}
-              onClick={() => setCurrentSlide(i)}
-            />
+            <button key={i} className={`hero-dot${i === currentSlide ? " active" : ""}`} onClick={() => setCurrentSlide(i)} />
           ))}
         </div>
       </section>
 
-      {/* CATEGORÍAS */}
+      {/* ══ CATEGORÍAS ══ */}
       <section className="section">
-        <p className="section-label">EXPLORA POR ÁREA</p>
+        <p className="section-label">Explora por área</p>
         <h2 className="section-title">Categorías de la colección</h2>
         <div className="mosaic-grid">
           {categorias.map((cat) => (
-            <div key={cat.categoria_nombre} className={`mosaic-card${cat.large ? " large" : ""}`}>
+            <div key={cat.categoria_nombre} className={`mosaic-card${cat.large ? " large" : ""}`}
+              onClick={() => navigate(`/libros?categoria=${encodeURIComponent(cat.categoria_nombre)}`)}>
               <img src={cat.image} alt={cat.categoria_nombre} />
               <div className="mosaic-overlay" />
               <div className="mosaic-label">
@@ -216,9 +224,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* LIBROS DESTACADOS */}
+      {/* ══ LIBROS DESTACADOS ══ */}
       <section className="section">
-        <p className="section-label">LIBROS DESTACADOS</p>
+        <p className="section-label">Libros Destacados</p>
         <h2 className="section-title">Los más solicitados</h2>
         <div className="libros-grid">
           {librosDestacados.map((libro) => (
@@ -239,9 +247,8 @@ export default function Home() {
                   </button>
                   <button
                     className="btn-apartar"
-                    onClick={handleTramite}
+                    onClick={() => irA("/apartados")}
                     disabled={libro.libro_ejemplares === 0}
-                    title={!usuario ? "Inicia sesión para apartar" : ""}
                   >
                     {usuario ? "Apartar" : "Inicia sesión"}
                   </button>
@@ -252,60 +259,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SERVICIOS */}
+      {/* ══ SERVICIOS — sin duplicar, flujo claro ══ */}
       <section className="section">
-        <p className="section-label">SERVICIOS</p>
+        <p className="section-label">Servicios</p>
         <h2 className="section-title">¿Qué necesitas hoy?</h2>
         <div className="banner-grid">
-          <div className="banner-card" onClick={handleTramite}>
+          <div className="banner-card" onClick={() => irA("/prestamos")}>
             <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=800&q=80" alt="Préstamo" />
             <div className="banner-overlay" />
             <div className="banner-content">
+              <div className="banner-pill">Préstamo</div>
               <h3 className="banner-title">Solicita un préstamo</h3>
-              <p className="banner-sub">Lleva el libro a casa hasta por 7 días</p>
-              <button className="banner-cta">
-                {usuario ? "Solicitar préstamo" : "Regístrate para solicitar"}
-              </button>
+              <p className="banner-sub">Lleva el libro a casa hasta por 14 días hábiles</p>
+              <button className="banner-cta">{usuario ? "Ver mis préstamos →" : "Inicia sesión para solicitar"}</button>
             </div>
           </div>
-          <div className="banner-card" onClick={handleTramite}>
+          <div className="banner-card" onClick={() => irA("/apartados")}>
             <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&q=80" alt="Apartado" />
             <div className="banner-overlay" />
             <div className="banner-content">
+              <div className="banner-pill">Apartado</div>
               <h3 className="banner-title">Aparta tu ejemplar</h3>
-              <p className="banner-sub">Reserva el libro antes de que se agote</p>
-              <button className="banner-cta">
-                {usuario ? "Apartar ejemplar" : "Regístrate para apartar"}
-              </button>
+              <p className="banner-sub">Reserva el libro — tienes 3 días para recogerlo</p>
+              <button className="banner-cta">{usuario ? "Ver mis apartados →" : "Inicia sesión para apartar"}</button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* ══ FOOTER ══ */}
       <footer className="home-footer">
         <div className="footer-grid">
           <div>
-            <p className="footer-heading">Soporte</p>
-            {["Centro de ayuda", "Reportar problema", "Accesibilidad", "Políticas"].map((l) => (
-              <p key={l} className="footer-link">{l}</p>
+            <div className="footer-logo-row">
+              <div className="footer-logo-icon">B</div>
+              <span className="footer-logo-text">Biblioteca WEB</span>
+            </div>
+            <p className="footer-tagline">Tu portal de acceso al conocimiento académico. Préstamos, apartados y recursos digitales en un solo lugar.</p>
+          </div>
+          <div>
+            <p className="footer-heading">Navegación</p>
+            {[["Catálogo", "/libros"], ["Préstamos", "/prestamos"], ["Apartados", "/apartados"]].map(([l, r]) => (
+              <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
             ))}
           </div>
           <div>
-            <p className="footer-heading">Servicios</p>
-            {["Catálogo en línea", "Préstamos", "Apartados", "Renovaciones"].map((l) => (
-              <p key={l} className="footer-link">{l}</p>
-            ))}
-          </div>
-          <div>
-            <p className="footer-heading">Acerca de</p>
-            {["Historia BUAP", "Misión", "Contacto", "Ubicación"].map((l) => (
-              <p key={l} className="footer-link">{l}</p>
-            ))}
+            <p className="footer-heading">Cuenta</p>
+            {usuario
+              ? [["Dashboard", "/dashboard"], ["Mis préstamos", "/prestamos"], ["Mis apartados", "/apartados"]].map(([l, r]) => (
+                  <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
+                ))
+              : [["Iniciar sesión", "/login"], ["Registrarse", "/registro"]].map(([l, r]) => (
+                  <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
+                ))
+            }
           </div>
           <div>
             <p className="footer-heading">Boletín informativo</p>
-            <p className="footer-desc">Recibe novedades en tu correo institucional</p>
+            <p className="footer-desc">Recibe novedades directamente en tu correo institucional.</p>
             <div className="newsletter-row">
               <input className="newsletter-input" placeholder="tu@alumno.web.mx" />
               <button className="newsletter-btn">Suscribir</button>
@@ -313,9 +324,11 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2025 Biblioteca BUAP · Privacidad · Términos de uso</span>
+          <span>© 2025 Biblioteca WEB · Todos los derechos reservados</span>
+          <span>Privacidad · Términos de uso · Accesibilidad</span>
         </div>
       </footer>
+
     </div>
   );
 }

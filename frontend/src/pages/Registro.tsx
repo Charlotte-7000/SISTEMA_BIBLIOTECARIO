@@ -6,10 +6,8 @@ interface FormRegistro {
   usuario_nombre: string;
   usuario_aPaterno: string;
   usuario_aMaterno: string;
-  usuario_nombre_acceso: string;
-  usuario_password: string;
   matricula_id: string;
-  usuario_rol: string;
+  usuario_password: string;
 }
 
 export default function Registro() {
@@ -18,15 +16,13 @@ export default function Registro() {
     usuario_nombre: "",
     usuario_aPaterno: "",
     usuario_aMaterno: "",
-    usuario_nombre_acceso: "",
-    usuario_password: "",
     matricula_id: "",
-    usuario_rol: "Alumno",
+    usuario_password: "",
   });
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
   };
@@ -46,7 +42,7 @@ export default function Registro() {
       } else {
         const data = await response.json();
         const primerError = Object.values(data)[0];
-        setError(Array.isArray(primerError) ? primerError[0] : "Error al registrar.");
+        setError(Array.isArray(primerError) ? primerError[0] as string : "Error al registrar.");
       }
     } catch {
       setError("No se pudo conectar con el servidor.");
@@ -57,7 +53,6 @@ export default function Registro() {
 
   return (
     <div className="registro-page">
-      {/* Panel izquierdo — imagen */}
       <div className="registro-panel-img">
         <img
           src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=900&q=80"
@@ -76,19 +71,15 @@ export default function Registro() {
         </div>
       </div>
 
-      {/* Panel derecho — formulario */}
       <div className="registro-panel-form">
         <div className="registro-form-wrap">
-          {/* Logo móvil */}
           <div className="registro-logo-mobile">
             <div className="registro-logo-icon">B</div>
             <span className="registro-logo-text">Biblioteca Web</span>
           </div>
 
           <h1 className="registro-titulo">Crear cuenta</h1>
-          <p className="registro-subtitulo">
-            Llena los datos para registrarte 
-          </p>
+          <p className="registro-subtitulo">Llena los datos para registrarte</p>
 
           <form onSubmit={handleSubmit} className="registro-form">
             <div className="form-row">
@@ -131,7 +122,7 @@ export default function Registro() {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Matrícula</label>
+                <label className="form-label">ID Institucional</label>
                 <input
                   className="form-input"
                   type="text"
@@ -139,21 +130,9 @@ export default function Registro() {
                   placeholder="Ej. 202312345"
                   value={form.matricula_id}
                   onChange={handleChange}
+                  required
                 />
               </div>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Usuario de acceso</label>
-              <input
-                className="form-input"
-                type="text"
-                name="usuario_nombre_acceso"
-                placeholder="Ej. jperez"
-                value={form.usuario_nombre_acceso}
-                onChange={handleChange}
-                required
-              />
             </div>
 
             <div className="form-group">
@@ -167,20 +146,6 @@ export default function Registro() {
                 onChange={handleChange}
                 required
               />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Rol</label>
-              <select
-                className="form-input"
-                name="usuario_rol"
-                value={form.usuario_rol}
-                onChange={handleChange}
-              >
-                <option value="Alumno">Alumno</option>
-                <option value="Docente">Docente</option>
-                <option value="Administrador">Administrador</option>
-              </select>
             </div>
 
             {error && <p className="registro-error">{error}</p>}
