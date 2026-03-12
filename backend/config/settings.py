@@ -56,7 +56,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE":   "django.db.backends.postgresql",
-        "NAME":     "biblioteca_web",
+        "NAME":     "biblioteca",
         "USER":     "swb_user",
         "PASSWORD": "tilines1234",
         "HOST":     "localhost",
@@ -82,5 +82,6 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+     "http://localhost:5174",
     "http://localhost:3000",
 ]

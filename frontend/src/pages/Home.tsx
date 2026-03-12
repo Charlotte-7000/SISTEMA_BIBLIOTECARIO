@@ -1,5 +1,7 @@
+// src/pages/Home.tsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getLibros, getCategorias, type Libro, type Categoria } from "../services/api";
 import "./Home.css";
 
 interface Slide {
@@ -9,27 +11,13 @@ interface Slide {
   chip: string;
 }
 
-interface LibroDestacado {
-  libro_id: number;
-  libro_titulo: string;
-  libro_autor: string;
-  categoria: string;
-  libro_ejemplares: number;
-  image: string;
-}
-
-interface CategoriaCard {
-  categoria_nombre: string;
-  tag: string;
-  image: string;
-  large: boolean;
-}
-
 interface Usuario {
   usuario_id: number;
   usuario_nombre: string;
-  usuario_nombre_acceso: string;
-  usuario_rol: string;
+  matricula_id: string;
+  esta_bloqueado: boolean;
+  dias_bloqueo_restantes: number;
+  usuario_bloqueado_hasta: string | null;
 }
 
 const slides: Slide[] = [
@@ -53,25 +41,29 @@ const slides: Slide[] = [
   },
 ];
 
-const categorias: CategoriaCard[] = [
-  { categoria_nombre: "Ciencias Exactas",  tag: "Exactas",     image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80", large: true  },
-  { categoria_nombre: "Humanidades",       tag: "Humanidades", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&q=80", large: false },
-  { categoria_nombre: "Ciencias de Salud", tag: "Salud",       image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80", large: false },
-  { categoria_nombre: "Derecho",           tag: "Derecho",     image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&q=80", large: false },
-];
+const categoriaImagenes: Record<string, string> = {
+  "Ciencias Exactas":  "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80",
+  "Humanidades":       "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&q=80",
+  "Ciencias de Salud": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80",
+  "Derecho":           "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&q=80",
+  "default":           "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80",
+};
 
-const librosDestacados: LibroDestacado[] = [
-  { libro_id: 1, libro_titulo: "Cálculo Diferencial e Integral", libro_autor: "James Stewart",     categoria: "Ciencias Exactas",  libro_ejemplares: 8,  image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80" },
-  { libro_id: 2, libro_titulo: "Introducción al Derecho",        libro_autor: "Eduardo García M.", categoria: "Derecho",           libro_ejemplares: 5,  image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&q=80" },
-  { libro_id: 3, libro_titulo: "Anatomía Humana",                libro_autor: "Frank H. Netter",   categoria: "Ciencias de Salud", libro_ejemplares: 0,  image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400&q=80" },
-  { libro_id: 4, libro_titulo: "Historia de México",             libro_autor: "Enrique Krauze",    categoria: "Humanidades",       libro_ejemplares: 12, image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80" },
+const libroImagenes = [
+  "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80",
+  "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&q=80",
+  "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400&q=80",
+  "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80",
 ];
 
 export default function Home() {
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [search, setSearch] = useState("");
-  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [currentSlide,  setCurrentSlide]  = useState(0);
+  const [search,        setSearch]        = useState("");
+  const [usuario,       setUsuario]       = useState<Usuario | null>(null);
+  const [libros,        setLibros]        = useState<Libro[]>([]);
+  const [categorias,    setCategorias]    = useState<Categoria[]>([]);
+  const [cargandoLibros, setCargandoLibros] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem("usuario");
@@ -83,7 +75,18 @@ export default function Home() {
     return () => clearInterval(t);
   }, []);
 
-  // Navega a la ruta protegida o al login si no hay sesión
+  useEffect(() => {
+    getCategorias().then(setCategorias).catch(() => {});
+    setCargandoLibros(true);
+    getLibros()
+      .then(data => {
+        // Tomar los primeros 4 libros
+        setLibros(data.slice(0, 4));
+        setCargandoLibros(false);
+      })
+      .catch(() => setCargandoLibros(false));
+  }, []);
+
   const irA = (ruta: string) => {
     if (!usuario) navigate("/login");
     else navigate(ruta);
@@ -93,12 +96,16 @@ export default function Home() {
     localStorage.removeItem("token");
     localStorage.removeItem("usuario");
     setUsuario(null);
+    navigate("/");
   };
 
   const handleBuscar = () => {
     if (search.trim()) navigate(`/libros?busqueda=${encodeURIComponent(search)}`);
     else navigate("/libros");
   };
+
+  // Primeras 4 categorías de la BD
+  const categoriasDestacadas = categorias.slice(0, 4);
 
   return (
     <div className="home-page">
@@ -124,20 +131,47 @@ export default function Home() {
           <div className="header-actions">
             {usuario ? (
               <div className="usuario-sesion">
+                {/* Aviso de bloqueo en header */}
+                {usuario.esta_bloqueado && (
+                  <div className="header-bloqueo-pill">
+                    🔒 Bloqueado · {usuario.dias_bloqueo_restantes}d restantes
+                  </div>
+                )}
                 <span className="usuario-bienvenida">
                   Hola, <strong>{usuario.usuario_nombre}</strong>
                 </span>
-                <button className="btn-outline" onClick={handleCerrarSesion}>Cerrar sesión</button>
-                <button className="btn-primary" onClick={() => navigate("/dashboard")}>Dashboard</button>
+                <button className="btn-outline" onClick={handleCerrarSesion}>
+                  Cerrar sesión
+                </button>
+                
               </div>
             ) : (
               <div className="usuario-sesion">
-                <button className="btn-outline" onClick={() => navigate("/login")}>Iniciar sesión</button>
-                <button className="btn-primary" onClick={() => navigate("/registro")}>Registrarse</button>
+                <button className="btn-outline" onClick={() => navigate("/login")}>
+                  Iniciar sesión
+                </button>
+                <button className="btn-primary" onClick={() => navigate("/registro")}>
+                  Registrarse
+                </button>
               </div>
             )}
           </div>
         </div>
+
+        {/* Banner de bloqueo debajo del header */}
+        {usuario?.esta_bloqueado && (
+          <div className="header-bloqueo-banner">
+            <span>🔒</span>
+            <span>
+              Tu cuenta está bloqueada por <strong>{usuario.dias_bloqueo_restantes} día(s)</strong> más
+              debido a una devolución tardía. Podrás solicitar préstamos y apartados a partir
+              del <strong>{usuario.usuario_bloqueado_hasta}</strong>.
+            </span>
+            <button onClick={() => irA("/prestamos")} className="header-bloqueo-link">
+              Ver mis préstamos
+            </button>
+          </div>
+        )}
 
         <div className="search-bar">
           <div className="search-wrap">
@@ -177,12 +211,18 @@ export default function Home() {
               <h1 className="slide-headline">{slide.headline}</h1>
               <p className="slide-sub">{slide.sub}</p>
               <div className="slide-actions">
-                <button className="slide-cta" onClick={() => navigate("/libros")}>Explorar catálogo</button>
+                <button className="slide-cta" onClick={() => navigate("/libros")}>
+                  Explorar catálogo
+                </button>
                 {!usuario && (
-                  <button className="slide-cta-ghost" onClick={() => navigate("/registro")}>Crear cuenta</button>
+                  <button className="slide-cta-ghost" onClick={() => navigate("/registro")}>
+                    Crear cuenta
+                  </button>
                 )}
                 {usuario && (
-                  <button className="slide-cta-ghost" onClick={() => navigate("/prestamos")}>Mis préstamos</button>
+                  <button className="slide-cta-ghost" onClick={() => navigate("/prestamos")}>
+                    Mis préstamos
+                  </button>
                 )}
               </div>
             </div>
@@ -190,7 +230,11 @@ export default function Home() {
         ))}
 
         <div className="hero-stats">
-          {[{ num: "12,400+", label: "Títulos" }, { num: "320+", label: "Autores" }, { num: "4", label: "Áreas" }].map((s) => (
+          {[
+            { num: `${libros.length > 0 ? '12,400+' : '—'}`, label: "Títulos" },
+            { num: `${categorias.length > 0 ? categorias.length : '—'}`, label: "Categorías" },
+            { num: "14 días", label: "Préstamo" },
+          ].map((s) => (
             <div className="hero-stat-pill" key={s.label}>
               <span className="hero-stat-num">{s.num}</span>
               <span className="hero-stat-label">{s.label}</span>
@@ -205,61 +249,75 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ CATEGORÍAS ══ */}
-      <section className="section">
-        <p className="section-label">Explora por área</p>
-        <h2 className="section-title">Categorías de la colección</h2>
-        <div className="mosaic-grid">
-          {categorias.map((cat) => (
-            <div key={cat.categoria_nombre} className={`mosaic-card${cat.large ? " large" : ""}`}
-              onClick={() => navigate(`/libros?categoria=${encodeURIComponent(cat.categoria_nombre)}`)}>
-              <img src={cat.image} alt={cat.categoria_nombre} />
-              <div className="mosaic-overlay" />
-              <div className="mosaic-label">
-                <span className="mosaic-tag">{cat.tag}</span>
-                <p className="mosaic-title">{cat.categoria_nombre}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══ LIBROS DESTACADOS ══ */}
-      <section className="section">
-        <p className="section-label">Libros Destacados</p>
-        <h2 className="section-title">Los más solicitados</h2>
-        <div className="libros-grid">
-          {librosDestacados.map((libro) => (
-            <div key={libro.libro_id} className="libro-card">
-              <div className="libro-img-wrap">
-                <img src={libro.image} alt={libro.libro_titulo} />
-                <span className={`libro-badge ${libro.libro_ejemplares > 0 ? "disponible" : "agotado"}`}>
-                  {libro.libro_ejemplares > 0 ? `${libro.libro_ejemplares} disponibles` : "Agotado"}
-                </span>
-              </div>
-              <div className="libro-info">
-                <span className="libro-categoria">{libro.categoria}</span>
-                <p className="libro-titulo">{libro.libro_titulo}</p>
-                <p className="libro-autor">{libro.libro_autor}</p>
-                <div className="libro-actions">
-                  <button className="btn-ver" onClick={() => navigate("/libros")}>
-                    Ver catálogo
-                  </button>
-                  <button
-                    className="btn-apartar"
-                    onClick={() => irA("/apartados")}
-                    disabled={libro.libro_ejemplares === 0}
-                  >
-                    {usuario ? "Apartar" : "Inicia sesión"}
-                  </button>
+      {/* ══ CATEGORÍAS desde BD ══ */}
+      {categoriasDestacadas.length > 0 && (
+        <section className="section">
+          <p className="section-label">Explora por área</p>
+          <h2 className="section-title">Categorías de la colección</h2>
+          <div className="mosaic-grid">
+            {categoriasDestacadas.map((cat, i) => (
+              <div
+                key={cat.categoria_id}
+                className={`mosaic-card${i === 0 ? " large" : ""}`}
+                onClick={() => navigate(`/libros?categoria=${cat.categoria_id}`)}
+              >
+                <img
+                  src={categoriaImagenes[cat.categoria_nombre] || categoriaImagenes["default"]}
+                  alt={cat.categoria_nombre}
+                />
+                <div className="mosaic-overlay" />
+                <div className="mosaic-label">
+                  <span className="mosaic-tag">{cat.categoria_nombre}</span>
+                  <p className="mosaic-title">{cat.categoria_nombre}</p>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ══ LIBROS DESTACADOS desde BD ══ */}
+      <section className="section">
+        <p className="section-label">Libros Destacados</p>
+        <h2 className="section-title">Los más recientes</h2>
+        {cargandoLibros ? (
+          <div className="home-loading">
+            <div className="home-spinner" />
+            <p>Cargando libros…</p>
+          </div>
+        ) : (
+          <div className="libros-grid">
+            {libros.map((libro, i) => (
+              <div key={libro.libro_id} className="libro-card">
+                <div className="libro-img-wrap">
+                  <img src={libroImagenes[i % libroImagenes.length]} alt={libro.libro_titulo} />
+                  <span className={`libro-badge ${libro.libro_ejemplares > 0 ? "disponible" : "agotado"}`}>
+                    {libro.libro_ejemplares > 0 ? `${libro.libro_ejemplares} disponibles` : "Agotado"}
+                  </span>
+                </div>
+                <div className="libro-info">
+                  <span className="libro-categoria">{libro.categoria_nombre}</span>
+                  <p className="libro-titulo">{libro.libro_titulo}</p>
+                  <p className="libro-autor">{libro.libro_autor}</p>
+                  <div className="libro-actions">
+                    <button className="btn-ver" onClick={() => navigate("/libros")}>
+                      Ver catálogo
+                    </button>
+                    <button
+                      className="btn-apartar"
+                      onClick={() => navigate("/libros")}
+                    >
+                      {usuario ? "Solicitar" : "Inicia sesión"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* ══ SERVICIOS — sin duplicar, flujo claro ══ */}
+      {/* ══ SERVICIOS ══ */}
       <section className="section">
         <p className="section-label">Servicios</p>
         <h2 className="section-title">¿Qué necesitas hoy?</h2>
@@ -270,8 +328,10 @@ export default function Home() {
             <div className="banner-content">
               <div className="banner-pill">Préstamo</div>
               <h3 className="banner-title">Solicita un préstamo</h3>
-              <p className="banner-sub">Lleva el libro a casa hasta por 14 días hábiles</p>
-              <button className="banner-cta">{usuario ? "Ver mis préstamos →" : "Inicia sesión para solicitar"}</button>
+              <p className="banner-sub">Lleva el libro a casa hasta por 14 días</p>
+              <button className="banner-cta">
+                {usuario ? "Ver mis préstamos →" : "Inicia sesión para solicitar"}
+              </button>
             </div>
           </div>
           <div className="banner-card" onClick={() => irA("/apartados")}>
@@ -280,8 +340,10 @@ export default function Home() {
             <div className="banner-content">
               <div className="banner-pill">Apartado</div>
               <h3 className="banner-title">Aparta tu ejemplar</h3>
-              <p className="banner-sub">Reserva el libro — tienes 3 días para recogerlo</p>
-              <button className="banner-cta">{usuario ? "Ver mis apartados →" : "Inicia sesión para apartar"}</button>
+              <p className="banner-sub">Reserva el libro — elige entre 3, 5 o 7 días para recogerlo</p>
+              <button className="banner-cta">
+                {usuario ? "Ver mis apartados →" : "Inicia sesión para apartar"}
+              </button>
             </div>
           </div>
         </div>
@@ -295,7 +357,9 @@ export default function Home() {
               <div className="footer-logo-icon">B</div>
               <span className="footer-logo-text">Biblioteca WEB</span>
             </div>
-            <p className="footer-tagline">Tu portal de acceso al conocimiento académico. Préstamos, apartados y recursos digitales en un solo lugar.</p>
+            <p className="footer-tagline">
+              Tu portal de acceso al conocimiento académico. Préstamos, apartados y recursos digitales en un solo lugar.
+            </p>
           </div>
           <div>
             <p className="footer-heading">Navegación</p>
@@ -306,7 +370,7 @@ export default function Home() {
           <div>
             <p className="footer-heading">Cuenta</p>
             {usuario
-              ? [["Dashboard", "/dashboard"], ["Mis préstamos", "/prestamos"], ["Mis apartados", "/apartados"]].map(([l, r]) => (
+              ? [["Mis préstamos", "/prestamos"], ["Mis apartados", "/apartados"]].map(([l, r]) => (
                   <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
                 ))
               : [["Iniciar sesión", "/login"], ["Registrarse", "/registro"]].map(([l, r]) => (

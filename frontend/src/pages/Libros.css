@@ -329,3 +329,50 @@
   .libros-grid         { grid-template-columns: 1fr; }
   .libros-modal        { padding: 32px 20px; }
 }
+/* ── Selector días apartado ── */
+.libros-dias-selector {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.libros-dias-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.libros-dias-opciones {
+  display: flex;
+  gap: 8px;
+}
+
+.libros-dia-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1.5px solid #e2e8f2;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.libros-dia-btn:hover {
+  border-color: #0057ff;
+  color: #0057ff;
+  background: #eff4ff;
+}
+
+.libros-dia-btn.activo {
+  border-color: #0057ff;
+  background: #0057ff;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0,87,255,0.25);
+}

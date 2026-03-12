@@ -15,9 +15,10 @@ export interface Usuario {
   usuario_id: number;
   usuario_nombre: string;
   usuario_aPaterno: string;
-  usuario_nombre_acceso: string;
   matricula_id: string;
-  usuario_rol: string;
+  usuario_bloqueado_hasta: string | null;
+  esta_bloqueado: boolean;
+  dias_bloqueo_restantes: number;
 }
 
 export interface Libro {
@@ -65,18 +66,20 @@ export interface Multa {
   multa_id: number;
   prestamo_id: number;
   libro_titulo: string;
-  multa_monto: string;
+  multa_dias_bloqueo: number;
   multa_motivo: string;
-  multa_estatus: 'Pendiente' | 'Pagada';
+  multa_fecha_inicio: string;
+  multa_fecha_fin: string;
+  multa_estatus: 'Activa' | 'Cumplida';
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 
-export async function login(usuario_nombre_acceso: string, usuario_password: string) {
+export async function login(matricula_id: string, usuario_password: string) {
   const r = await fetch(`${BASE}/login/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ usuario_nombre_acceso, usuario_password }),
+    body: JSON.stringify({ matricula_id, usuario_password }),
   });
   const d = await r.json();
   if (!r.ok) throw new Error(d.error || 'Credenciales incorrectas');
@@ -87,10 +90,8 @@ export async function registro(data: {
   usuario_nombre: string;
   usuario_aPaterno: string;
   usuario_aMaterno: string;
-  usuario_nombre_acceso: string;
-  usuario_password: string;
   matricula_id: string;
-  usuario_rol: string;
+  usuario_password: string;
 }) {
   const r = await fetch(`${BASE}/registro/`, {
     method: 'POST',
@@ -138,17 +139,6 @@ export async function crearPrestamo(libro_id: number) {
   return d as Prestamo;
 }
 
-export async function devolverLibro(prestamo_id: number) {
-  const r = await fetch(`${BASE}/prestamos/${prestamo_id}/`, {
-    method: 'PATCH',
-    headers: headers(),
-    body: JSON.stringify({}),
-  });
-  const d = await r.json();
-  if (!r.ok) throw new Error(d.error || 'Error al devolver');
-  return d as Prestamo;
-}
-
 // ── APARTADOS ─────────────────────────────────────────────────────────────────
 
 export async function getApartados() {
@@ -157,11 +147,11 @@ export async function getApartados() {
   return r.json() as Promise<Apartado[]>;
 }
 
-export async function crearApartado(libro_id: number) {
+export async function crearApartado(libro_id: number, dias_apartado: 3 | 5 | 7 = 3) {
   const r = await fetch(`${BASE}/apartados/`, {
     method: 'POST',
     headers: headers(),
-    body: JSON.stringify({ libro_id }),
+    body: JSON.stringify({ libro_id, dias_apartado }),
   });
   const d = await r.json();
   if (!r.ok) throw new Error(d.error || 'Error al crear apartado');
@@ -185,15 +175,4 @@ export async function getMultas() {
   const r = await fetch(`${BASE}/multas/`, { headers: headers() });
   if (!r.ok) throw new Error('Error al obtener multas');
   return r.json() as Promise<Multa[]>;
-}
-
-export async function pagarMulta(multa_id: number) {
-  const r = await fetch(`${BASE}/multas/${multa_id}/`, {
-    method: 'PATCH',
-    headers: headers(),
-    body: JSON.stringify({}),
-  });
-  const d = await r.json();
-  if (!r.ok) throw new Error(d.error || 'Error al pagar multa');
-  return d as Multa;
 }

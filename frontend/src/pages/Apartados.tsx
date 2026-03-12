@@ -1,7 +1,18 @@
 // src/pages/Apartados.tsx
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getApartados, cancelarApartado, type Apartado } from '../services/api';
+import Navbar from '../components/layout/Navbar';
 import './Apartados.css';
+
+interface Usuario {
+  usuario_id: number;
+  usuario_nombre: string;
+  matricula_id: string;
+  esta_bloqueado: boolean;
+  dias_bloqueo_restantes: number;
+  usuario_bloqueado_hasta: string | null;
+}
 
 interface ModalData {
   apartado_id: number;
@@ -13,10 +24,18 @@ interface ModalData {
 }
 
 export default function Apartados() {
+  const navigate = useNavigate();
+  const [usuario,   setUsuario]   = useState<Usuario | null>(null);
   const [apartados, setApartados] = useState<Apartado[]>([]);
   const [loading,   setLoading]   = useState(true);
   const [modal,     setModal]     = useState<ModalData | null>(null);
   const [msg,       setMsg]       = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("usuario");
+    if (stored) setUsuario(JSON.parse(stored));
+    else navigate("/login");
+  }, []);
 
   const cargar = async () => {
     setLoading(true);
@@ -30,6 +49,12 @@ export default function Apartados() {
   const mostrar = (tipo: 'ok' | 'err', texto: string) => {
     setMsg({ tipo, texto });
     setTimeout(() => setMsg(null), 4000);
+  };
+
+  const handleCerrarSesion = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    navigate("/");
   };
 
   const handleCancelar = async (id: number) => {
@@ -56,13 +81,15 @@ export default function Apartados() {
   return (
     <div className="apart-page">
 
+      <Navbar usuario={usuario} onCerrarSesion={handleCerrarSesion} />
+
       {/* Hero */}
       <div className="apart-hero">
         <div>
           <div className="apart-breadcrumb">Biblioteca WEB / Mis Apartados</div>
           <h1 className="apart-h1">Mis Apartados</h1>
           <p className="apart-subtitle">
-            Al apartar un libro tienes <strong>3 días</strong> para recogerlo antes de que la reserva expire.
+            Al apartar un libro elige entre <strong>3, 5 o 7 días</strong> para recogerlo antes de que la reserva expire.
           </p>
         </div>
         <div className="apart-hero-stats">
@@ -80,7 +107,9 @@ export default function Apartados() {
         <>
           {/* Activos */}
           <section className="apart-section">
-            <h2 className="apart-section-title">Activos <span className="apart-badge">{activos.length}</span></h2>
+            <h2 className="apart-section-title">
+              Activos <span className="apart-badge">{activos.length}</span>
+            </h2>
             {activos.length === 0 ? (
               <div className="apart-empty">
                 <div className="apart-empty-ico">🔖</div>
@@ -90,12 +119,22 @@ export default function Apartados() {
             ) : (
               <div className="apart-grid">
                 {activos.map(a => (
-                  <button key={a.apartado_id} className={`apart-card urg-${urgClass(a.dias_restantes)}`}
-                    onClick={() => setModal({ apartado_id: a.apartado_id, libro_titulo: a.libro_titulo,
-                      libro_autor: a.libro_autor, apartado_fecha: a.apartado_fecha,
-                      apartado_fecha_expiracion: a.apartado_fecha_expiracion, dias_restantes: a.dias_restantes })}>
+                  <button
+                    key={a.apartado_id}
+                    className={`apart-card urg-${urgClass(a.dias_restantes)}`}
+                    onClick={() => setModal({
+                      apartado_id: a.apartado_id,
+                      libro_titulo: a.libro_titulo,
+                      libro_autor: a.libro_autor,
+                      apartado_fecha: a.apartado_fecha,
+                      apartado_fecha_expiracion: a.apartado_fecha_expiracion,
+                      dias_restantes: a.dias_restantes,
+                    })}
+                  >
                     <div className="apart-card-top">
-                      <span className={`apart-urg-pill urg-${urgClass(a.dias_restantes)}`}>{urgText(a.dias_restantes)}</span>
+                      <span className={`apart-urg-pill urg-${urgClass(a.dias_restantes)}`}>
+                        {urgText(a.dias_restantes)}
+                      </span>
                       <span className="apart-card-arrow">↗</span>
                     </div>
                     <h3 className="apart-card-titulo">{a.libro_titulo}</h3>
@@ -114,10 +153,14 @@ export default function Apartados() {
           {/* Historial */}
           {pasados.length > 0 && (
             <section className="apart-section">
-              <h2 className="apart-section-title">Historial <span className="apart-badge">{pasados.length}</span></h2>
+              <h2 className="apart-section-title">
+                Historial <span className="apart-badge">{pasados.length}</span>
+              </h2>
               <div className="apart-tabla-wrap">
                 <table className="apart-tabla">
-                  <thead><tr><th>Libro</th><th>Autor</th><th>Apartado</th><th>Expiración</th><th>Estatus</th></tr></thead>
+                  <thead>
+                    <tr><th>Libro</th><th>Autor</th><th>Apartado</th><th>Expiración</th><th>Estatus</th></tr>
+                  </thead>
                   <tbody>
                     {pasados.map(a => (
                       <tr key={a.apartado_id}>
@@ -125,7 +168,11 @@ export default function Apartados() {
                         <td className="td-muted">{a.libro_autor}</td>
                         <td>{fc(a.apartado_fecha)}</td>
                         <td>{fc(a.apartado_fecha_expiracion)}</td>
-                        <td><span className={`apart-pill ${a.apartado_estatus.toLowerCase()}`}>{a.apartado_estatus}</span></td>
+                        <td>
+                          <span className={`apart-pill ${a.apartado_estatus.toLowerCase()}`}>
+                            {a.apartado_estatus}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -136,21 +183,21 @@ export default function Apartados() {
         </>
       )}
 
-      {/* ══ MODAL ══ */}
+      {/* Modal */}
       {modal && (
         <div className="apart-backdrop" onClick={() => setModal(null)}>
           <div className="apart-modal" onClick={e => e.stopPropagation()}>
             <button className="apart-modal-x" onClick={() => setModal(null)}>✕</button>
-
             <div className="apart-modal-icon">🔖</div>
             <p className="apart-modal-pre">Libro apartado</p>
             <h2 className="apart-modal-titulo">{modal.libro_titulo}</h2>
             <p className="apart-modal-autor">{modal.libro_autor}</p>
 
-            {/* Contador visual */}
             <div className={`apart-dias-box urg-${urgClass(modal.dias_restantes)}`}>
               <span className="apart-dias-num">{modal.dias_restantes}</span>
-              <span className="apart-dias-label">{modal.dias_restantes === 1 ? 'día restante' : 'días restantes'}</span>
+              <span className="apart-dias-label">
+                {modal.dias_restantes === 1 ? 'día restante' : 'días restantes'}
+              </span>
             </div>
 
             <div className={`apart-aviso urg-${urgClass(modal.dias_restantes)}`}>
@@ -158,7 +205,8 @@ export default function Apartados() {
                 ? '⚠️ Tu apartado expira hoy. Pasa a recogerlo a la brevedad.'
                 : modal.dias_restantes === 1
                 ? '⚠️ Solo tienes 1 día. Recoge el libro mañana a más tardar.'
-                : `Tienes hasta el ${fl(modal.apartado_fecha_expiracion)} para recoger el libro en biblioteca.`}
+                : `Tienes hasta el ${fl(modal.apartado_fecha_expiracion)} para recoger el libro en biblioteca.`
+              }
             </div>
 
             <div className="apart-modal-fechas">

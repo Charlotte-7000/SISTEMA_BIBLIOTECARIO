@@ -1,0 +1,150 @@
+/* src/components/Navbar.css */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+.home-header {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  border-bottom: 1px solid #e2e8f2;
+  box-shadow: 0 1px 3px rgba(11,15,26,0.07);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+  height: 66px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.logo-wrap {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; flex-shrink: 0;
+  padding-right: 36px; margin-right: 8px;
+  border-right: 1px solid #e2e8f2;
+  height: 100%;
+}
+
+.logo-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(140deg, #0057ff 0%, #4f8bff 100%);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: 'Lora', serif; font-weight: 700; font-size: 18px;
+  box-shadow: 0 3px 14px rgba(0,87,255,0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  flex-shrink: 0;
+}
+.logo-wrap:hover .logo-icon {
+  transform: scale(1.07);
+  box-shadow: 0 5px 20px rgba(0,87,255,0.38);
+}
+
+.logo-text {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700; font-size: 15px;
+  color: #0b0f1a; letter-spacing: -0.3px; white-space: nowrap;
+}
+
+nav {
+  flex: 1; display: flex; align-items: center;
+  height: 100%; padding-left: 12px;
+}
+
+.nav-list {
+  display: flex; align-items: stretch;
+  height: 100%; gap: 4px; list-style: none;
+}
+
+.nav-item {
+  position: relative; display: flex; align-items: center;
+  padding: 0 20px; font-size: 14px;
+  font-family: 'Sora', sans-serif; font-weight: 500;
+  color: rgba(11,15,26,0.68); cursor: pointer;
+  transition: color 0.18s ease; white-space: nowrap;
+  border-radius: 8px 8px 0 0;
+}
+.nav-item:hover { background: #f4f7fc; color: #0b0f1a; }
+.nav-item::after {
+  content: ''; position: absolute;
+  bottom: -1px; left: 18px; right: 18px;
+  height: 2px; border-radius: 2px 2px 0 0;
+  background: #0057ff; transform: scaleX(0);
+  transform-origin: center; transition: transform 0.18s ease;
+}
+.nav-item:hover::after  { transform: scaleX(0.5); opacity: 0.5; }
+.nav-item.active        { color: #0057ff; font-weight: 600; }
+.nav-item.active::after { transform: scaleX(1); }
+
+.header-actions {
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0; padding-left: 28px; margin-left: auto;
+  border-left: 1px solid #e2e8f2; height: 40px;
+}
+
+.usuario-sesion { display: flex; align-items: center; gap: 12px; }
+
+.usuario-bienvenida {
+  font-size: 13px; color: rgba(11,15,26,0.40);
+  font-family: 'Sora', sans-serif; white-space: nowrap;
+}
+.usuario-bienvenida strong { color: #0b0f1a; font-weight: 600; }
+
+.btn-outline {
+  padding: 7px 16px; border-radius: 8px;
+  border: 1.5px solid #c8d2e4; background: transparent;
+  color: rgba(11,15,26,0.70); font-size: 13px; font-weight: 500;
+  font-family: 'Sora', sans-serif; transition: all 0.18s ease; white-space: nowrap;
+}
+.btn-outline:hover { border-color: #0057ff; color: #0057ff; background: #eff4ff; }
+
+.btn-primary {
+  padding: 8px 18px; border-radius: 8px; border: none;
+  background: #0057ff; color: #fff;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Sora', sans-serif; transition: all 0.18s ease;
+  white-space: nowrap; box-shadow: 0 2px 12px rgba(0,87,255,0.3);
+}
+.btn-primary:hover {
+  background: #0040cc;
+  box-shadow: 0 4px 20px rgba(0,87,255,0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Bloqueo ── */
+.header-bloqueo-pill {
+  background: #fee2e2; color: #991b1b;
+  border: 1px solid #fca5a5; border-radius: 999px;
+  padding: 4px 12px; font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+
+.header-bloqueo-banner {
+  background: #fff1f2; border-bottom: 1px solid #fecdd3;
+  padding: 10px 40px; display: flex; align-items: center;
+  gap: 10px; font-size: 13px; color: #991b1b;
+  font-family: 'Sora', sans-serif;
+}
+.header-bloqueo-banner strong { font-weight: 700; }
+
+.header-bloqueo-link {
+  margin-left: auto; background: none; border: none;
+  color: #b91c1c; font-size: 12.5px; font-weight: 700;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  text-decoration: underline; white-space: nowrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .header-inner { flex-wrap: wrap; height: auto; padding: 12px 20px; gap: 8px; }
+  .logo-wrap { border-right: none; padding-right: 0; margin-right: 0; height: auto; width: 100%; justify-content: center; }
+  nav { justify-content: center; width: 100%; }
+  .nav-list { justify-content: center; flex-wrap: wrap; gap: 0; }
+  .nav-item { padding: 10px 12px; font-size: 13px; }
+  .nav-item::after { display: none; }
+  .header-actions { border-left: none; padding-left: 0; height: auto; justify-content: center; width: 100%; margin-left: 0; }
+  .header-bloqueo-banner { padding: 10px 20px; }
+}

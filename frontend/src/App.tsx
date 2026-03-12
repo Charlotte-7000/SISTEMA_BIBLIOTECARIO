@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
-import Dashboard from "./pages/Dashboard";
 import Libros from "./pages/Libros";
 import Prestamos from "./pages/Prestamos";
 import Apartados from "./pages/Apartados";
@@ -22,11 +21,10 @@ export default function App() {
         <Route path="/home"     element={<Home />} />
         <Route path="/login"    element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+         <Route path="/libros"   element={<Libros />} /> 
 
         {/* Rutas protegidas */}
         <Route element={<Layout />}>
-          <Route path="/dashboard" element={<RutaProtegida><Dashboard /></RutaProtegida>} />
-          <Route path="/libros"    element={<RutaProtegida><Libros /></RutaProtegida>} />
           <Route path="/prestamos" element={<RutaProtegida><Prestamos /></RutaProtegida>} />
           <Route path="/apartados" element={<RutaProtegida><Apartados /></RutaProtegida>} />
         </Route>

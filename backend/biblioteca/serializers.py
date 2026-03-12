@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Usuario, Libro, Categoria, Editorial
+from datetime import date
+from .models import Usuario, Libro, Categoria, Editorial, Prestamo, Apartado, Multa
 
 
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Usuario
+        model  = Usuario
         fields = [
             'usuario_nombre', 'usuario_aPaterno', 'usuario_aMaterno',
             'matricula_id', 'usuario_password',
@@ -18,8 +19,8 @@ class RegistroSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    matricula_id      = serializers.CharField()
-    usuario_password  = serializers.CharField(write_only=True)
+    matricula_id     = serializers.CharField()
+    usuario_password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         try:
@@ -35,14 +36,31 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    esta_bloqueado = serializers.SerializerMethodField()
+    dias_bloqueo_restantes = serializers.SerializerMethodField()
+
     class Meta:
-        model = Usuario
-        fields = ['usuario_id', 'usuario_nombre', 'usuario_aPaterno', 'matricula_id']
+        model  = Usuario
+        fields = [
+            'usuario_id', 'usuario_nombre', 'usuario_aPaterno',
+            'matricula_id', 'usuario_bloqueado_hasta',
+            'esta_bloqueado', 'dias_bloqueo_restantes',
+        ]
+
+    def get_esta_bloqueado(self, obj):
+        if obj.usuario_bloqueado_hasta and obj.usuario_bloqueado_hasta >= date.today():
+            return True
+        return False
+
+    def get_dias_bloqueo_restantes(self, obj):
+        if obj.usuario_bloqueado_hasta and obj.usuario_bloqueado_hasta >= date.today():
+            return (obj.usuario_bloqueado_hasta - date.today()).days
+        return 0
 
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Categoria
+        model  = Categoria
         fields = ['categoria_id', 'categoria_nombre']
 
 
@@ -51,16 +69,13 @@ class LibroSerializer(serializers.ModelSerializer):
     editorial_nombre = serializers.CharField(source='editorial.editorial_nombre', read_only=True)
 
     class Meta:
-        model = Libro
+        model  = Libro
         fields = [
             'libro_id', 'libro_titulo', 'libro_autor',
             'libro_isbn', 'libro_ejemplares', 'libro_descripcion',
             'categoria_id', 'categoria_nombre',
             'editorial_id', 'editorial_nombre',
         ]
-
-
-from .models import Prestamo, Apartado, Multa
 
 
 class PrestamoSerializer(serializers.ModelSerializer):
@@ -77,7 +92,6 @@ class PrestamoSerializer(serializers.ModelSerializer):
         ]
 
     def get_dias_retraso(self, obj):
-        from datetime import date
         if obj.prestamo_estatus != 'Devuelto':
             hoy = date.today()
             if hoy > obj.prestamo_fecha_entrega_esperada:
@@ -109,7 +123,6 @@ class ApartadoSerializer(serializers.ModelSerializer):
         ]
 
     def get_dias_restantes(self, obj):
-        from datetime import date
         if obj.apartado_estatus == 'Activo':
             return max((obj.apartado_fecha_expiracion - date.today()).days, 0)
         return 0
@@ -128,5 +141,7 @@ class MultaSerializer(serializers.ModelSerializer):
         model  = Multa
         fields = [
             'multa_id', 'prestamo_id', 'libro_titulo',
-            'multa_monto', 'multa_motivo', 'multa_estatus',
+            'multa_dias_bloqueo', 'multa_motivo',
+            'multa_fecha_inicio', 'multa_fecha_fin',
+            'multa_estatus',
         ]

@@ -10,18 +10,19 @@ interface ModalApartado {
 }
 
 export default function Libros() {
-  const navigate      = useNavigate()
+  const navigate       = useNavigate()
   const [searchParams] = useSearchParams()
 
-  const [libros,     setLibros]     = useState<Libro[]>([])
-  const [categorias, setCategorias] = useState<Categoria[]>([])
-  const [busqueda,   setBusqueda]   = useState(searchParams.get("busqueda") || "")
-  const [categoria,  setCategoria]  = useState("")
-  const [cargando,   setCargando]   = useState(true)
-  const [error,      setError]      = useState("")
-  const [modal,      setModal]      = useState<ModalApartado | null>(null)
-  const [accionando, setAccionando] = useState(false)
-  const [msg,        setMsg]        = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null)
+  const [libros,       setLibros]     = useState<Libro[]>([])
+  const [categorias,   setCategorias] = useState<Categoria[]>([])
+  const [busqueda,     setBusqueda]   = useState(searchParams.get("busqueda") || "")
+  const [categoria,    setCategoria]  = useState("")
+  const [cargando,     setCargando]   = useState(true)
+  const [error,        setError]      = useState("")
+  const [modal,        setModal]      = useState<ModalApartado | null>(null)
+  const [accionando,   setAccionando] = useState(false)
+  const [msg,          setMsg]        = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null)
+  const [diasApartado, setDiasApartado] = useState<3 | 5 | 7>(3)
 
   const usuario = JSON.parse(localStorage.getItem("usuario") || "null")
 
@@ -47,10 +48,10 @@ export default function Libros() {
     if (!usuario) { navigate("/login"); return }
     setAccionando(true)
     try {
-      await crearApartado(modal.libro.libro_id)
-      mostrar('ok', `"${modal.libro.libro_titulo}" apartado correctamente. Tienes 3 días para recogerlo.`)
+      await crearApartado(modal.libro.libro_id, diasApartado)
+      mostrar('ok', `"${modal.libro.libro_titulo}" apartado correctamente. Tienes ${diasApartado} días para recogerlo.`)
       setModal(null)
-      // Recargar libros para actualizar ejemplares
+      setDiasApartado(3)
       getLibros(busqueda, categoria).then(setLibros)
     } catch (e: any) {
       mostrar('err', e.message)
@@ -79,6 +80,7 @@ export default function Libros() {
 
   const abrirModal = (libro: Libro, tipo: 'apartar' | 'prestar') => {
     if (!usuario) { navigate("/login"); return }
+    setDiasApartado(3)
     setModal({ libro, tipo })
   }
 
@@ -199,11 +201,9 @@ export default function Libros() {
                       </button>
                     </>
                   ) : (
-                    <>
-                      <button className="btn-apartar-agotado" onClick={() => abrirModal(libro, 'apartar')}>
-                        🔖 Apartar para cuando esté disponible
-                      </button>
-                    </>
+                    <button className="btn-apartar-agotado" onClick={() => abrirModal(libro, 'apartar')}>
+                      🔖 Apartar para cuando esté disponible
+                    </button>
                   )}
                 </div>
               </div>
@@ -212,7 +212,7 @@ export default function Libros() {
         )}
       </div>
 
-      {/* ══ MODAL confirmación ══ */}
+      {/* ══ MODAL ══ */}
       {modal && (
         <div className="libros-backdrop" onClick={() => setModal(null)}>
           <div className="libros-modal" onClick={e => e.stopPropagation()}>
@@ -241,31 +241,49 @@ export default function Libros() {
                   </div>
                   <div className="libros-modal-info-sep" />
                   <div className="libros-modal-info-item">
-                    <span className="lmi-label">Multa por retraso</span>
-                    <span className="lmi-val red">$5.00/día</span>
+                    <span className="lmi-label">Retraso</span>
+                    <span className="lmi-val red">1 día bloqueado por día</span>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="libros-modal-info-item">
-                    <span className="lmi-label">Vigencia del apartado</span>
-                    <span className="lmi-val">3 días</span>
-                  </div>
-                  <div className="libros-modal-info-sep" />
                   <div className="libros-modal-info-item">
                     <span className="lmi-label">Estado del libro</span>
                     <span className={`lmi-val ${modal.libro.libro_ejemplares > 0 ? 'green' : 'red'}`}>
                       {modal.libro.libro_ejemplares > 0 ? 'Disponible' : 'Sin ejemplares'}
                     </span>
                   </div>
+                  <div className="libros-modal-info-sep" />
+                  <div className="libros-modal-info-item">
+                    <span className="lmi-label">Vigencia del apartado</span>
+                    <span className="lmi-val">{diasApartado} días</span>
+                  </div>
                 </>
               )}
             </div>
 
+            {/* Selector de días solo para apartado */}
+            {modal.tipo === 'apartar' && (
+              <div className="libros-dias-selector">
+                <span className="libros-dias-label">¿Cuántos días necesitas?</span>
+                <div className="libros-dias-opciones">
+                  {([3, 5, 7] as const).map(d => (
+                    <button
+                      key={d}
+                      className={`libros-dia-btn ${diasApartado === d ? 'activo' : ''}`}
+                      onClick={() => setDiasApartado(d)}
+                    >
+                      {d} días
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <p className="libros-modal-aviso">
               {modal.tipo === 'prestar'
-                ? 'Al confirmar, el libro quedará registrado a tu nombre. Debes devolverlo en biblioteca dentro de 14 días.'
-                : 'Al apartar, tienes 3 días para pasar a recoger el libro. Si no lo recoges, el apartado expira automáticamente.'
+                ? 'Al confirmar, el libro quedará registrado a tu nombre. Debes devolverlo en biblioteca dentro de 14 días. Si hay retraso, tu cuenta será bloqueada 1 día por cada día de retraso.'
+                : `Al apartar, tienes ${diasApartado} días para pasar a recoger el libro. Si no lo recoges, el apartado expira automáticamente.`
               }
             </p>
 
