@@ -35,7 +35,13 @@ export default function Login() {
         const data = await response.json();
         localStorage.setItem("token", data.token);
         localStorage.setItem("usuario", JSON.stringify(data.usuario));
-        navigate("/home");
+
+        // Redirigir según rol
+        if (data.usuario.usuario_rol === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/home");
+        }
       } else {
         setError("Matrícula o contraseña incorrectos.");
       }
@@ -55,7 +61,6 @@ export default function Login() {
         />
         <div className="login-panel-overlay" />
 
-        {/* Botón volver flotante sobre la imagen */}
         <button className="login-volver-btn" onClick={() => navigate("/")}>
           ← Volver al inicio
         </button>

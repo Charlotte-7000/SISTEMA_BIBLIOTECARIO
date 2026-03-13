@@ -1,0 +1,327 @@
+/* src/pages/admin/AdminUsuarios.css */
+
+.ausu-page {
+  padding: 36px 40px;
+  min-height: 100vh;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+}
+
+.ausu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ausu-title {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  color: var(--admin-text);
+  margin-bottom: 4px;
+}
+
+.ausu-sub {
+  font-size: 13px;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+}
+
+.ausu-btn-nuevo {
+  background: var(--admin-accent);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: sans-serif;
+  transition: background 0.2s;
+}
+.ausu-btn-nuevo:hover { background: #2d3a9e; }
+
+/* Notif */
+.ausu-notif {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.ausu-notif.ok  { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+.ausu-notif.err { background: rgba(239,68,68,0.15);  color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+/* Filtros */
+.ausu-filtros {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ausu-search {
+  flex: 1;
+  max-width: 360px;
+  padding: 10px 14px;
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 14px;
+  font-family: sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.ausu-search:focus { border-color: var(--admin-accent); }
+.ausu-search::placeholder { color: var(--admin-muted); }
+
+.ausu-count {
+  font-size: 13px;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+}
+
+/* Tabla */
+.ausu-tabla-wrap {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ausu-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.ausu-tabla thead tr {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.ausu-tabla th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+}
+
+.ausu-tabla td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--admin-border);
+  color: var(--admin-text);
+}
+
+.ausu-tabla tbody tr:last-child td { border-bottom: none; }
+.ausu-tabla tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+.td-nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ausu-avatar {
+  width: 34px; height: 34px;
+  background: var(--admin-accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: #fff;
+  flex-shrink: 0;
+}
+
+.td-bold  { font-weight: 600; color: var(--admin-text); }
+.td-muted { color: var(--admin-muted); font-size: 13px; }
+
+/* Pills */
+.ausu-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.ausu-pill.activo    { background: rgba(16,185,129,0.15); color: #10b981; }
+.ausu-pill.bloqueado { background: rgba(239,68,68,0.15);  color: #ef4444; }
+.ausu-pill.rol-admin   { background: rgba(59,76,202,0.2);  color: #818cf8; }
+.ausu-pill.rol-usuario { background: rgba(255,255,255,0.08); color: var(--admin-muted); }
+
+/* Acciones */
+.ausu-acciones { display: flex; gap: 8px; }
+
+.ausu-btn-edit {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--admin-border);
+  background: none;
+  color: var(--admin-text);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: sans-serif;
+  transition: background 0.15s;
+}
+.ausu-btn-edit:hover { background: var(--admin-border); }
+
+.ausu-btn-del {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(239,68,68,0.3);
+  background: none;
+  color: #ef4444;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: sans-serif;
+  transition: background 0.15s;
+}
+.ausu-btn-del:hover { background: rgba(239,68,68,0.1); }
+
+/* Empty / Loading */
+.ausu-empty {
+  text-align: center;
+  padding: 60px;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+}
+
+.ausu-loading {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 16px; padding: 60px;
+  color: var(--admin-muted); font-family: sans-serif;
+}
+
+.ausu-spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--admin-border);
+  border-top-color: var(--admin-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Modal ── */
+.ausu-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.ausu-modal {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%; max-width: 560px;
+  position: relative;
+}
+
+.ausu-modal-sm { max-width: 400px; text-align: center; }
+
+.ausu-modal-x {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: none;
+  color: var(--admin-muted); cursor: pointer;
+  font-size: 18px; line-height: 1;
+}
+.ausu-modal-x:hover { color: var(--admin-text); }
+
+.ausu-modal-title {
+  font-size: 20px; font-weight: 700;
+  font-family: Georgia, serif;
+  color: var(--admin-text);
+  margin-bottom: 24px;
+}
+
+/* Form */
+.ausu-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ausu-form-group {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.ausu-form-group label {
+  font-size: 12px; font-weight: 700;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.ausu-form-group input,
+.ausu-form-group select {
+  padding: 10px 12px;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 14px;
+  font-family: sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.ausu-form-group input:focus,
+.ausu-form-group select:focus { border-color: var(--admin-accent); }
+.ausu-form-group select option { background: var(--admin-card-bg); }
+
+/* Modal btns */
+.ausu-modal-btns {
+  display: flex; gap: 10px;
+}
+
+.ausu-btn-guardar {
+  flex: 1; padding: 11px;
+  background: var(--admin-accent); color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: sans-serif;
+  transition: background 0.2s;
+}
+.ausu-btn-guardar:hover:not(:disabled) { background: #2d3a9e; }
+.ausu-btn-guardar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.ausu-btn-cancelar {
+  padding: 11px 20px;
+  background: none;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-muted);
+  border-radius: 8px;
+  font-size: 14px; cursor: pointer;
+  font-family: sans-serif;
+  transition: background 0.2s;
+}
+.ausu-btn-cancelar:hover { background: var(--admin-border); color: var(--admin-text); }
+
+/* Eliminar */
+.ausu-del-ico { font-size: 40px; margin-bottom: 12px; }
+
+.ausu-del-txt {
+  font-size: 14px; color: var(--admin-muted);
+  font-family: sans-serif; line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.ausu-btn-del-confirm {
+  flex: 1; padding: 11px;
+  background: var(--admin-danger); color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: sans-serif;
+  transition: background 0.2s;
+}
+.ausu-btn-del-confirm:hover:not(:disabled) { background: #b91c1c; }
+.ausu-btn-del-confirm:disabled { opacity: 0.6; cursor: not-allowed; }

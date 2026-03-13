@@ -1,13 +1,19 @@
 from django.db import models
 
+
 class Usuario(models.Model):
+    ROL_CHOICES = [
+        ('usuario', 'Usuario'),
+        ('admin',   'Admin'),
+    ]
     usuario_id              = models.AutoField(primary_key=True)
     matricula_id            = models.CharField(max_length=20, unique=True)
     usuario_nombre          = models.CharField(max_length=100)
     usuario_aPaterno        = models.CharField(max_length=100)
     usuario_aMaterno        = models.CharField(max_length=100, blank=True, default='')
     usuario_password        = models.CharField(max_length=255)
-    usuario_bloqueado_hasta = models.DateField(null=True, blank=True)  # ← nuevo
+    usuario_rol             = models.CharField(max_length=20, choices=ROL_CHOICES, default='usuario')
+    usuario_bloqueado_hasta = models.DateField(null=True, blank=True)
 
     class Meta:
         db_table = 'usuarios'
@@ -45,9 +51,9 @@ class Libro(models.Model):
 
 class Prestamo(models.Model):
     ESTATUS_CHOICES = [
-        ('Activo',    'Activo'),
-        ('Devuelto',  'Devuelto'),
-        ('Vencido',   'Vencido'),
+        ('Activo',   'Activo'),
+        ('Devuelto', 'Devuelto'),
+        ('Vencido',  'Vencido'),
     ]
     prestamo_id                     = models.AutoField(primary_key=True)
     usuario                         = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
@@ -67,12 +73,12 @@ class Apartado(models.Model):
         ('Cancelado',  'Cancelado'),
         ('Convertido', 'Convertido'),
     ]
-    apartado_id              = models.AutoField(primary_key=True)
-    usuario                  = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
-    libro                    = models.ForeignKey(Libro, on_delete=models.CASCADE, db_column='libro_id')
-    apartado_fecha           = models.DateField()
+    apartado_id               = models.AutoField(primary_key=True)
+    usuario                   = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
+    libro                     = models.ForeignKey(Libro, on_delete=models.CASCADE, db_column='libro_id')
+    apartado_fecha            = models.DateField()
     apartado_fecha_expiracion = models.DateField()
-    apartado_estatus         = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='Activo')
+    apartado_estatus          = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='Activo')
 
     class Meta:
         db_table = 'apartados'

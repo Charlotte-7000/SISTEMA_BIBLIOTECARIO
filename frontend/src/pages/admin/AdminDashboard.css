@@ -1,0 +1,126 @@
+/* src/pages/admin/AdminDashboard.css */
+
+.adash-page {
+  padding: 36px 40px;
+  min-height: 100vh;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+}
+
+.adash-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.adash-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--admin-text);
+  font-family: Georgia, serif;
+  margin-bottom: 4px;
+}
+
+.adash-sub {
+  font-size: 14px;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+}
+
+.adash-fecha {
+  font-size: 13px;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+  text-transform: capitalize;
+  padding: 8px 14px;
+  background: var(--admin-card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+}
+
+/* ── Grid de tarjetas ── */
+.adash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.adash-card {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.adash-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.adash-card-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.adash-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.adash-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.adash-card-label {
+  font-size: 12px;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+}
+
+/* Colores por tipo */
+.adash-card-blue   .adash-card-value { color: #60a5fa; }
+.adash-card-purple .adash-card-value { color: #a78bfa; }
+.adash-card-green  .adash-card-value { color: var(--admin-success); }
+.adash-card-red    .adash-card-value { color: var(--admin-danger); }
+.adash-card-yellow .adash-card-value { color: var(--admin-warning); }
+.adash-card-orange .adash-card-value { color: #fb923c; }
+
+.adash-card-blue   { border-left: 3px solid #60a5fa; }
+.adash-card-purple { border-left: 3px solid #a78bfa; }
+.adash-card-green  { border-left: 3px solid var(--admin-success); }
+.adash-card-red    { border-left: 3px solid var(--admin-danger); }
+.adash-card-yellow { border-left: 3px solid var(--admin-warning); }
+.adash-card-orange { border-left: 3px solid #fb923c; }
+
+/* Loading */
+.adash-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 0;
+  color: var(--admin-muted);
+  font-family: sans-serif;
+}
+
+.adash-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--admin-border);
+  border-top-color: var(--admin-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
