@@ -43,6 +43,12 @@ type Modal =
 
 type TabCatalogo = 'libros' | 'categorias' | 'editoriales';
 
+const ITEMS_POR_PAGINA = 10;
+
+// Devuelve la clase CSS según cantidad de ejemplares
+const ejClass = (n: number) =>
+  n === 0 ? 'cero' : n <= 2 ? 'bajo' : n <= 5 ? 'medio' : 'alto';
+
 export default function AdminLibros() {
   const [libros,      setLibros]      = useState<Libro[]>([]);
   const [categorias,  setCategorias]  = useState<Categoria[]>([]);
@@ -54,6 +60,7 @@ export default function AdminLibros() {
   const [form,        setForm]        = useState<FormLibro>(FORM_VACIO);
   const [msg,         setMsg]         = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null);
   const [guardando,   setGuardando]   = useState(false);
+  const [pagina,      setPagina]      = useState(1);
 
   // Para categorías y editoriales inline
   const [nuevoNombre, setNuevoNombre] = useState('');
@@ -77,6 +84,7 @@ export default function AdminLibros() {
   };
 
   useEffect(() => { cargar(); }, []);
+  useEffect(() => { setPagina(1); }, [busqueda]);
 
   const mostrar = (tipo: 'ok' | 'err', texto: string) => {
     setMsg({ tipo, texto });
@@ -181,9 +189,20 @@ export default function AdminLibros() {
     } catch { mostrar('err', 'Error al eliminar editorial'); }
   };
 
-  const filtrados = libros.filter(l =>
+  // Paginación
+  const filtrados    = libros.filter(l =>
     `${l.libro_titulo} ${l.libro_autor} ${l.libro_isbn}`.toLowerCase().includes(busqueda.toLowerCase())
   );
+  const totalPaginas = Math.ceil(filtrados.length / ITEMS_POR_PAGINA);
+  const paginados    = filtrados.slice((pagina - 1) * ITEMS_POR_PAGINA, pagina * ITEMS_POR_PAGINA);
+
+  const numeros = Array.from({ length: totalPaginas }, (_, i) => i + 1)
+    .filter(n => n === 1 || n === totalPaginas || Math.abs(n - pagina) <= 1)
+    .reduce<(number | '...')[]>((acc, n, idx, arr) => {
+      if (idx > 0 && (n as number) - (arr[idx - 1] as number) > 1) acc.push('...');
+      acc.push(n);
+      return acc;
+    }, []);
 
   return (
     <div className="alib-page">
@@ -246,14 +265,14 @@ export default function AdminLibros() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filtrados.map(l => (
+                      {paginados.map(l => (
                         <tr key={l.libro_id}>
                           <td className="td-bold">{l.libro_titulo}</td>
                           <td className="td-muted">{l.libro_autor}</td>
                           <td className="td-muted">{l.libro_isbn}</td>
                           <td>
-                            <span className={`alib-ej ${l.libro_ejemplares === 0 ? 'cero' : ''}`}>
-                              {l.libro_ejemplares}
+                            <span className={`alib-ej ${ejClass(l.libro_ejemplares)}`}>
+                              {l.libro_ejemplares} {l.libro_ejemplares === 1 ? 'ej.' : 'ejs.'}
                             </span>
                           </td>
                           <td className="td-muted">{l.categoria_nombre || '—'}</td>
@@ -268,6 +287,39 @@ export default function AdminLibros() {
                       ))}
                     </tbody>
                   </table>
+
+                  {/* Paginación */}
+                  {totalPaginas > 1 && (
+                    <div className="alib-pagination">
+                      <button
+                        className="alib-pg-btn"
+                        onClick={() => setPagina(p => Math.max(1, p - 1))}
+                        disabled={pagina === 1}
+                      >
+                        ‹ Anterior
+                      </button>
+                      <div className="alib-pg-nums">
+                        {numeros.map((n, i) =>
+                          n === '...'
+                            ? <span key={`e${i}`} className="alib-pg-ellipsis">…</span>
+                            : <button
+                                key={n}
+                                className={`alib-pg-num ${pagina === n ? 'active' : ''}`}
+                                onClick={() => setPagina(n as number)}
+                              >
+                                {n}
+                              </button>
+                        )}
+                      </div>
+                      <button
+                        className="alib-pg-btn"
+                        onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))}
+                        disabled={pagina === totalPaginas}
+                      >
+                        Siguiente ›
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </>
@@ -291,12 +343,7 @@ export default function AdminLibros() {
                   <div key={c.categoria_id} className="alib-lista-item">
                     {editandoId === c.categoria_id ? (
                       <>
-                        <input
-                          className="alib-edit-input"
-                          value={editNombre}
-                          onChange={e => setEditNombre(e.target.value)}
-                          autoFocus
-                        />
+                        <input className="alib-edit-input" value={editNombre} onChange={e => setEditNombre(e.target.value)} autoFocus />
                         <button className="alib-btn-save" onClick={() => editarCategoria(c.categoria_id)}>Guardar</button>
                         <button className="alib-btn-cancel-sm" onClick={() => setEditandoId(null)}>✕</button>
                       </>
@@ -333,12 +380,7 @@ export default function AdminLibros() {
                   <div key={e.editorial_id} className="alib-lista-item">
                     {editandoId === e.editorial_id ? (
                       <>
-                        <input
-                          className="alib-edit-input"
-                          value={editNombre}
-                          onChange={e2 => setEditNombre(e2.target.value)}
-                          autoFocus
-                        />
+                        <input className="alib-edit-input" value={editNombre} onChange={e2 => setEditNombre(e2.target.value)} autoFocus />
                         <button className="alib-btn-save" onClick={() => editarEditorial(e.editorial_id)}>Guardar</button>
                         <button className="alib-btn-cancel-sm" onClick={() => setEditandoId(null)}>✕</button>
                       </>
@@ -367,7 +409,6 @@ export default function AdminLibros() {
             <h2 className="alib-modal-title">
               {modal.tipo === 'crear' ? 'Nuevo libro' : 'Editar libro'}
             </h2>
-
             <div className="alib-form-grid">
               <div className="alib-form-group alib-span2">
                 <label>Título</label>
@@ -404,7 +445,6 @@ export default function AdminLibros() {
                 <textarea value={form.libro_descripcion} onChange={e => setForm({...form, libro_descripcion: e.target.value})} placeholder="Descripción del libro (opcional)" rows={3} />
               </div>
             </div>
-
             <div className="alib-modal-btns">
               <button className="alib-btn-guardar" onClick={handleGuardar} disabled={guardando}>
                 {guardando ? 'Guardando…' : modal.tipo === 'crear' ? 'Crear libro' : 'Guardar cambios'}

@@ -43,10 +43,12 @@ button { cursor: pointer; }
   color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 /* ═══════════════════════════════
-   HEADER
+   HEADER — usado por Navbar.tsx vía Layout
 ═══════════════════════════════ */
 .home-header {
   background: rgba(255,255,255,0.97);
@@ -59,7 +61,6 @@ button { cursor: pointer; }
   box-shadow: var(--shadow-xs);
 }
 
-/* Top row: logo | nav | auth */
 .header-inner {
   max-width: 1280px;
   margin: 0 auto;
@@ -71,7 +72,6 @@ button { cursor: pointer; }
   overflow: visible;
 }
 
-/* Logo */
 .logo-wrap {
   display: flex;
   align-items: center;
@@ -109,7 +109,6 @@ button { cursor: pointer; }
   white-space: nowrap;
 }
 
-/* Nav — takes remaining space */
 nav {
   flex: 1;
   display: flex;
@@ -118,7 +117,6 @@ nav {
   padding-left: 12px;
 }
 
-/* hard overrides — beat global resets (Tailwind, Ant Design, Vite) */
 .home-header nav > ul {
   display: flex !important;
   align-items: center !important;
@@ -179,7 +177,6 @@ nav {
 }
 .nav-item:hover { background: var(--surface-2); }
 
-/* sliding bottom indicator */
 .nav-item::after {
   content: '';
   position: absolute;
@@ -196,7 +193,6 @@ nav {
 .nav-item.active { color: var(--brand); font-weight: 600; }
 .nav-item.active::after { transform: scaleX(1); }
 
-/* Auth — flush right */
 .header-actions {
   display: flex;
   align-items: center;
@@ -248,10 +244,24 @@ nav {
   transform: translateY(-1px);
 }
 
-/* Search row */
+/* ═══════════════════════════════
+   SEARCH BAR — sticky debajo del navbar
+═══════════════════════════════ */
 .search-bar {
   background: var(--surface-2);
-  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 11px 40px;
+  margin: 0;
+}
+
+.home-search-bar {
+  position: sticky;
+  top: 66px;
+  z-index: 200;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+  margin: 0;
   padding: 11px 40px;
 }
 
@@ -389,7 +399,6 @@ nav {
   background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.80);
 }
 
-/* stat pills */
 .hero-stats {
   position: absolute; bottom: 34px; right: 9%;
   display: flex; gap: 10px; z-index: 10;
@@ -716,7 +725,7 @@ nav {
 ═══════════════════════════════ */
 @media (max-width: 1024px) {
   .header-inner { padding: 0 24px; }
-  .search-bar { padding: 11px 24px; }
+  .search-bar, .home-search-bar { padding: 11px 24px; }
   .section { padding: 64px 24px 0; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .home-footer { padding: 48px 24px 24px; }
@@ -745,6 +754,7 @@ nav {
   .banner-grid { grid-template-columns: 1fr; }
   .hero-section { height: 460px; }
   .slide-headline { font-size: 38px; }
+  .home-search-bar { top: 120px; }
 }
 
 @media (max-width: 600px) {
@@ -755,8 +765,9 @@ nav {
   .libros-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .section { padding: 48px 16px 0; }
-  .search-bar { padding: 10px 16px; }
+  .search-bar, .home-search-bar { padding: 10px 16px; }
 }
+
 /* ── Bloqueo header ── */
 .header-bloqueo-pill {
   background: #fee2e2;
@@ -781,9 +792,7 @@ nav {
   font-family: 'Sora', sans-serif;
 }
 
-.header-bloqueo-banner strong {
-  font-weight: 700;
-}
+.header-bloqueo-banner strong { font-weight: 700; }
 
 .header-bloqueo-link {
   margin-left: auto;
@@ -817,3 +826,5 @@ nav {
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
+
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -1,8 +1,9 @@
 // src/pages/admin/AdminPrestamos.tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import './AdminPrestamos.css';
 
-const API = 'http://localhost:8000/api';
+const API        = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const POR_PAGINA = 10;
 
 interface Prestamo {
   prestamo_id:                    number;
@@ -38,10 +39,13 @@ export default function AdminPrestamos() {
   const [modal,      setModal]      = useState<Modal | null>(null);
   const [msg,        setMsg]        = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null);
   const [procesando, setProcesando] = useState(false);
+  const [pagina,     setPagina]     = useState(1);
 
   // Form registrar
-  const [matricula,  setMatricula]  = useState('');
-  const [libroId,    setLibroId]    = useState('');
+  const [matricula,     setMatricula]     = useState('');
+  const [busquedaLibro, setBusquedaLibro] = useState('');
+  const [libroSelecto,  setLibroSelecto]  = useState<Libro | null>(null);
+  const [mostrarDrop,   setMostrarDrop]   = useState(false);
 
   const token   = localStorage.getItem('token');
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
@@ -54,6 +58,7 @@ export default function AdminPrestamos() {
       if (filtro)  params.append('busqueda', filtro);
       const r = await fetch(`${API}/admin/prestamos/?${params}`, { headers });
       setPrestamos(await r.json());
+      setPagina(1);
     } catch { mostrar('err', 'Error al cargar préstamos'); }
     finally { setLoading(false); }
   };
@@ -71,19 +76,37 @@ export default function AdminPrestamos() {
     setTimeout(() => setMsg(null), 5000);
   };
 
+  // Filtrado de libros en el buscador del modal
+  const librosFiltrados = useMemo(() =>
+    busquedaLibro.trim().length < 2
+      ? []
+      : libros.filter(l =>
+          `${l.libro_titulo} ${l.libro_autor}`
+            .toLowerCase()
+            .includes(busquedaLibro.toLowerCase())
+        ).slice(0, 8),
+    [busquedaLibro, libros]
+  );
+
+  const seleccionarLibro = (l: Libro) => {
+    setLibroSelecto(l);
+    setBusquedaLibro(l.libro_titulo);
+    setMostrarDrop(false);
+  };
+
   const handleRegistrar = async () => {
-    if (!matricula || !libroId) { mostrar('err', 'Completa todos los campos.'); return; }
+    if (!matricula || !libroSelecto) { mostrar('err', 'Completa todos los campos.'); return; }
     setProcesando(true);
     try {
       const r = await fetch(`${API}/admin/prestamos/`, {
         method: 'POST', headers,
-        body: JSON.stringify({ matricula_id: matricula, libro_id: Number(libroId) }),
+        body: JSON.stringify({ matricula_id: matricula, libro_id: libroSelecto.libro_id }),
       });
       const data = await r.json();
       if (!r.ok) throw new Error(data.error || 'Error al registrar préstamo');
       mostrar('ok', 'Préstamo registrado correctamente');
       setModal(null);
-      setMatricula(''); setLibroId('');
+      setMatricula(''); setBusquedaLibro(''); setLibroSelecto(null);
       cargar();
     } catch (e: any) { mostrar('err', e.message); }
     finally { setProcesando(false); }
@@ -110,6 +133,18 @@ export default function AdminPrestamos() {
 
   const estatusColor = (e: string) =>
     e === 'Activo' ? 'activo' : e === 'Devuelto' ? 'devuelto' : 'vencido';
+
+  // Paginación
+  const totalPaginas = Math.ceil(prestamos.length / POR_PAGINA);
+  const paginados    = prestamos.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA);
+
+  const numeros = Array.from({ length: totalPaginas }, (_, i) => i + 1)
+    .filter(n => n === 1 || n === totalPaginas || Math.abs(n - pagina) <= 1)
+    .reduce<(number | '...')[]>((acc, n, idx, arr) => {
+      if (idx > 0 && (n as number) - (arr[idx - 1] as number) > 1) acc.push('...');
+      acc.push(n);
+      return acc;
+    }, []);
 
   return (
     <div className="aprest-page">
@@ -164,7 +199,7 @@ export default function AdminPrestamos() {
               </tr>
             </thead>
             <tbody>
-              {prestamos.map(p => (
+              {paginados.map(p => (
                 <tr key={p.prestamo_id}>
                   <td>
                     <div className="td-bold">{p.usuario_nombre}</div>
@@ -204,6 +239,39 @@ export default function AdminPrestamos() {
               ))}
             </tbody>
           </table>
+
+          {/* Paginador */}
+          {totalPaginas > 1 && (
+            <div className="aprest-pagination">
+              <button
+                className="aprest-pg-btn"
+                onClick={() => setPagina(p => Math.max(1, p - 1))}
+                disabled={pagina === 1}
+              >
+                ‹ Anterior
+              </button>
+              <div className="aprest-pg-nums">
+                {numeros.map((n, i) =>
+                  n === '...'
+                    ? <span key={`e${i}`} className="aprest-pg-ellipsis">…</span>
+                    : <button
+                        key={n}
+                        className={`aprest-pg-num ${pagina === n ? 'active' : ''}`}
+                        onClick={() => setPagina(n as number)}
+                      >
+                        {n}
+                      </button>
+                )}
+              </div>
+              <button
+                className="aprest-pg-btn"
+                onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))}
+                disabled={pagina === totalPaginas}
+              >
+                Siguiente ›
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -213,7 +281,7 @@ export default function AdminPrestamos() {
           <div className="aprest-modal" onClick={e => e.stopPropagation()}>
             <button className="aprest-modal-x" onClick={() => setModal(null)}>✕</button>
             <h2 className="aprest-modal-title">Registrar préstamo</h2>
-            <p className="aprest-modal-sub">Ingresa la matrícula del usuario y selecciona el libro.</p>
+            <p className="aprest-modal-sub">Ingresa la matrícula del usuario y busca el libro.</p>
 
             <div className="aprest-form">
               <div className="aprest-form-group">
@@ -224,16 +292,49 @@ export default function AdminPrestamos() {
                   placeholder="Ej. 2024UTT019"
                 />
               </div>
+
               <div className="aprest-form-group">
                 <label>Libro</label>
-                <select value={libroId} onChange={e => setLibroId(e.target.value)}>
-                  <option value="">Selecciona un libro…</option>
-                  {libros.map(l => (
-                    <option key={l.libro_id} value={l.libro_id}>
-                      {l.libro_titulo} — {l.libro_autor}
-                    </option>
-                  ))}
-                </select>
+                <div className="aprest-libro-search-wrap">
+                  <input
+                    value={busquedaLibro}
+                    onChange={e => {
+                      setBusquedaLibro(e.target.value);
+                      setLibroSelecto(null);
+                      setMostrarDrop(true);
+                    }}
+                    onFocus={() => setMostrarDrop(true)}
+                    placeholder="Escribe el título o autor…"
+                    autoComplete="off"
+                  />
+                  {libroSelecto && (
+                    <span className="aprest-libro-check">✓</span>
+                  )}
+                  {mostrarDrop && librosFiltrados.length > 0 && (
+                    <div className="aprest-libro-dropdown">
+                      {librosFiltrados.map(l => (
+                        <button
+                          key={l.libro_id}
+                          className="aprest-libro-option"
+                          onClick={() => seleccionarLibro(l)}
+                        >
+                          <span className="aplo-titulo">{l.libro_titulo}</span>
+                          <span className="aplo-autor">{l.libro_autor}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {mostrarDrop && busquedaLibro.length >= 2 && librosFiltrados.length === 0 && (
+                    <div className="aprest-libro-dropdown">
+                      <p className="aprest-libro-empty">Sin resultados para "{busquedaLibro}"</p>
+                    </div>
+                  )}
+                </div>
+                {libroSelecto && (
+                  <p className="aprest-libro-selecto">
+                    📖 <strong>{libroSelecto.libro_titulo}</strong> — {libroSelecto.libro_autor}
+                  </p>
+                )}
               </div>
             </div>
 

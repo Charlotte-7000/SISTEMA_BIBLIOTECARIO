@@ -2,20 +2,21 @@
 import { useEffect, useState } from 'react';
 import './AdminApartados.css';
 
-const API = 'http://localhost:8000/api';
+const API        = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const POR_PAGINA = 10;
 
 interface Apartado {
-  apartado_id:              number;
-  usuario_id:               number;
-  usuario_nombre:           string;
-  matricula_id:             string;
-  libro_id:                 number;
-  libro_titulo:             string;
-  libro_autor:              string;
-  apartado_fecha:           string;
-  apartado_fecha_expiracion:string;
-  apartado_estatus:         string;
-  dias_restantes:           number;
+  apartado_id:               number;
+  usuario_id:                number;
+  usuario_nombre:            string;
+  matricula_id:              string;
+  libro_id:                  number;
+  libro_titulo:              string;
+  libro_autor:               string;
+  apartado_fecha:            string;
+  apartado_fecha_expiracion: string;
+  apartado_estatus:          'Pendiente' | 'Asignado' | 'Cancelado' | 'Convertido';
+  dias_restantes:            number;
 }
 
 export default function AdminApartados() {
@@ -26,6 +27,7 @@ export default function AdminApartados() {
   const [modal,      setModal]      = useState<Apartado | null>(null);
   const [procesando, setProcesando] = useState(false);
   const [msg,        setMsg]        = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null);
+  const [pagina,     setPagina]     = useState(1);
 
   const token   = localStorage.getItem('token');
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
@@ -38,6 +40,7 @@ export default function AdminApartados() {
       if (filtro)  params.append('busqueda', filtro);
       const r = await fetch(`${API}/admin/apartados/?${params}`, { headers });
       setApartados(await r.json());
+      setPagina(1);
     } catch { mostrar('err', 'Error al cargar apartados'); }
     finally { setLoading(false); }
   };
@@ -69,13 +72,29 @@ export default function AdminApartados() {
   const fc = (f: string) =>
     new Date(f + 'T00:00:00').toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
 
-  const urgClass = (d: number, estatus: string) => {
-    if (estatus !== 'Activo') return '';
+  const urgClass = (d: number, est: string) => {
+    if (est !== 'Pendiente' && est !== 'Asignado') return '';
     return d === 0 ? 'roja' : d === 1 ? 'amarilla' : 'verde';
   };
 
   const estatusColor = (e: string) =>
-    e === 'Activo' ? 'activo' : e === 'Cancelado' ? 'cancelado' : 'convertido';
+    e === 'Pendiente'  ? 'pendiente'  :
+    e === 'Asignado'   ? 'asignado'   :
+    e === 'Cancelado'  ? 'cancelado'  : 'convertido';
+
+  const esActivo = (est: string) => est === 'Pendiente' || est === 'Asignado';
+
+  // Paginación
+  const totalPaginas = Math.ceil(apartados.length / POR_PAGINA);
+  const paginados    = apartados.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA);
+
+  const numeros = Array.from({ length: totalPaginas }, (_, i) => i + 1)
+    .filter(n => n === 1 || n === totalPaginas || Math.abs(n - pagina) <= 1)
+    .reduce<(number | '...')[]>((acc, n, idx, arr) => {
+      if (idx > 0 && (n as number) - (arr[idx - 1] as number) > 1) acc.push('...');
+      acc.push(n);
+      return acc;
+    }, []);
 
   return (
     <div className="aapart-page">
@@ -99,7 +118,8 @@ export default function AdminApartados() {
         />
         <select className="aapart-select" value={estatus} onChange={e => setEstatus(e.target.value)}>
           <option value="">Todos</option>
-          <option value="Activo">Activos</option>
+          <option value="Pendiente">Pendientes</option>
+          <option value="Asignado">Asignados</option>
           <option value="Cancelado">Cancelados</option>
           <option value="Convertido">Convertidos</option>
         </select>
@@ -126,7 +146,7 @@ export default function AdminApartados() {
               </tr>
             </thead>
             <tbody>
-              {apartados.map(a => (
+              {paginados.map(a => (
                 <tr key={a.apartado_id}>
                   <td>
                     <div className="td-bold">{a.usuario_nombre}</div>
@@ -139,7 +159,7 @@ export default function AdminApartados() {
                   <td className="td-muted">{fc(a.apartado_fecha)}</td>
                   <td className="td-muted">{fc(a.apartado_fecha_expiracion)}</td>
                   <td>
-                    {a.apartado_estatus === 'Activo' ? (
+                    {esActivo(a.apartado_estatus) ? (
                       <span className={`aapart-dias urg-${urgClass(a.dias_restantes, a.apartado_estatus)}`}>
                         {a.dias_restantes === 0 ? 'Hoy' : `${a.dias_restantes}d`}
                       </span>
@@ -153,7 +173,7 @@ export default function AdminApartados() {
                     </span>
                   </td>
                   <td>
-                    {a.apartado_estatus === 'Activo' && (
+                    {esActivo(a.apartado_estatus) && (
                       <button className="aapart-btn-cancelar" onClick={() => setModal(a)}>
                         Cancelar
                       </button>
@@ -163,6 +183,39 @@ export default function AdminApartados() {
               ))}
             </tbody>
           </table>
+
+          {/* Paginador */}
+          {totalPaginas > 1 && (
+            <div className="aapart-pagination">
+              <button
+                className="aapart-pg-btn"
+                onClick={() => setPagina(p => Math.max(1, p - 1))}
+                disabled={pagina === 1}
+              >
+                ‹ Anterior
+              </button>
+              <div className="aapart-pg-nums">
+                {numeros.map((n, i) =>
+                  n === '...'
+                    ? <span key={`e${i}`} className="aapart-pg-ellipsis">…</span>
+                    : <button
+                        key={n}
+                        className={`aapart-pg-num ${pagina === n ? 'active' : ''}`}
+                        onClick={() => setPagina(n as number)}
+                      >
+                        {n}
+                      </button>
+                )}
+              </div>
+              <button
+                className="aapart-pg-btn"
+                onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))}
+                disabled={pagina === totalPaginas}
+              >
+                Siguiente ›
+              </button>
+            </div>
+          )}
         </div>
       )}
 

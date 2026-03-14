@@ -31,7 +31,7 @@ const slides: Slide[] = [
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1400&q=80",
     headline: "Tu siguiente gran lectura",
     sub: "Explora colecciones especializadas por área de estudio.",
-    chip: "Más de 12,000 títulos",
+    chip: "Más de 500 títulos",
   },
   {
     image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1400&q=80",
@@ -58,11 +58,11 @@ const libroImagenes = [
 
 export default function Home() {
   const navigate = useNavigate();
-  const [currentSlide,  setCurrentSlide]  = useState(0);
-  const [search,        setSearch]        = useState("");
-  const [usuario,       setUsuario]       = useState<Usuario | null>(null);
-  const [libros,        setLibros]        = useState<Libro[]>([]);
-  const [categorias,    setCategorias]    = useState<Categoria[]>([]);
+  const [currentSlide,   setCurrentSlide]   = useState(0);
+  const [search,         setSearch]         = useState("");
+  const [usuario,        setUsuario]        = useState<Usuario | null>(null);
+  const [libros,         setLibros]         = useState<Libro[]>([]);
+  const [categorias,     setCategorias]     = useState<Categoria[]>([]);
   const [cargandoLibros, setCargandoLibros] = useState(true);
 
   useEffect(() => {
@@ -79,11 +79,7 @@ export default function Home() {
     getCategorias().then(setCategorias).catch(() => {});
     setCargandoLibros(true);
     getLibros()
-      .then(data => {
-        // Tomar los primeros 4 libros
-        setLibros(data.slice(0, 4));
-        setCargandoLibros(false);
-      })
+      .then(data => { setLibros(data.slice(0, 4)); setCargandoLibros(false); })
       .catch(() => setCargandoLibros(false));
   }, []);
 
@@ -92,115 +88,48 @@ export default function Home() {
     else navigate(ruta);
   };
 
-  const handleCerrarSesion = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
-    setUsuario(null);
-    navigate("/");
-  };
-
   const handleBuscar = () => {
     if (search.trim()) navigate(`/libros?busqueda=${encodeURIComponent(search)}`);
     else navigate("/libros");
   };
 
-  // Primeras 4 categorías de la BD
   const categoriasDestacadas = categorias.slice(0, 4);
 
   return (
     <div className="home-page">
 
-      {/* ══ HEADER ══ */}
-      <header className="home-header">
-        <div className="header-inner">
-
-          <div className="logo-wrap" onClick={() => navigate("/")}>
-            <div className="logo-icon">B</div>
-            <span className="logo-text">Biblioteca WEB</span>
-          </div>
-
-          <nav>
-            <ul className="nav-list">
-              <li className="nav-item active">Inicio</li>
-              <li className="nav-item" onClick={() => navigate("/libros")}>Catálogo</li>
-              <li className="nav-item" onClick={() => irA("/prestamos")}>Préstamos</li>
-              <li className="nav-item" onClick={() => irA("/apartados")}>Apartados</li>
-            </ul>
-          </nav>
-
-          <div className="header-actions">
-            {usuario ? (
-              <div className="usuario-sesion">
-                {/* Aviso de bloqueo en header */}
-                {usuario.esta_bloqueado && (
-                  <div className="header-bloqueo-pill">
-                    🔒 Bloqueado · {usuario.dias_bloqueo_restantes}d restantes
-                  </div>
-                )}
-                <span className="usuario-bienvenida">
-                  Hola, <strong>{usuario.usuario_nombre}</strong>
-                </span>
-                <button className="btn-outline" onClick={handleCerrarSesion}>
-                  Cerrar sesión
-                </button>
-                
-              </div>
-            ) : (
-              <div className="usuario-sesion">
-                <button className="btn-outline" onClick={() => navigate("/login")}>
-                  Iniciar sesión
-                </button>
-                <button className="btn-primary" onClick={() => navigate("/registro")}>
-                  Registrarse
-                </button>
-              </div>
-            )}
-          </div>
+      {/* ══ SEARCH BAR (sin header — el navbar lo pone Layout/Navbar) ══ */}
+      <div className="search-bar">
+        <div className="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+            style={{ color: "var(--ink-40)", flexShrink: 0 }}>
+            <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input
+            className="search-input"
+            placeholder="Buscar por título, autor, ISBN…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
+          />
+          <div className="search-divider" />
+          <select className="search-select">
+            <option>Todos</option>
+            <option>Título</option>
+            <option>Autor</option>
+            <option>ISBN</option>
+          </select>
+          <button className="search-btn" onClick={handleBuscar}>Buscar</button>
         </div>
-
-        {/* Banner de bloqueo debajo del header */}
-        {usuario?.esta_bloqueado && (
-          <div className="header-bloqueo-banner">
-            <span>🔒</span>
-            <span>
-              Tu cuenta está bloqueada por <strong>{usuario.dias_bloqueo_restantes} día(s)</strong> más
-              debido a una devolución tardía. Podrás solicitar préstamos y apartados a partir
-              del <strong>{usuario.usuario_bloqueado_hasta}</strong>.
-            </span>
-            <button onClick={() => irA("/prestamos")} className="header-bloqueo-link">
-              Ver mis préstamos
-            </button>
-          </div>
-        )}
-
-        <div className="search-bar">
-          <div className="search-wrap">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" style={{ color: "var(--ink-40)", flexShrink: 0 }}>
-              <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
-            </svg>
-            <input
-              className="search-input"
-              placeholder="Buscar por título, autor, ISBN…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
-            />
-            <div className="search-divider" />
-            <select className="search-select">
-              <option>Todos</option>
-              <option>Título</option>
-              <option>Autor</option>
-              <option>ISBN</option>
-            </select>
-            <button className="search-btn" onClick={handleBuscar}>Buscar</button>
-          </div>
-        </div>
-      </header>
+      </div>
 
       {/* ══ HERO ══ */}
       <section className="hero-section">
         {slides.map((slide, i) => (
-          <div key={i} className="slide" style={{ opacity: i === currentSlide ? 1 : 0, zIndex: i === currentSlide ? 1 : 0 }}>
+          <div
+            key={i} className="slide"
+            style={{ opacity: i === currentSlide ? 1 : 0, zIndex: i === currentSlide ? 1 : 0 }}
+          >
             <img src={slide.image} alt={slide.headline} />
             <div className="slide-overlay" />
             <div className="slide-content">
@@ -231,8 +160,8 @@ export default function Home() {
 
         <div className="hero-stats">
           {[
-            { num: `${libros.length > 0 ? '500 +' : '—'}`, label: "Títulos" },
-            { num: `${categorias.length > 0 ? categorias.length : '—'}`, label: "Categorías" },
+            { num: `${libros.length > 0 ? "500 +" : "—"}`, label: "Títulos" },
+            { num: `${categorias.length > 0 ? categorias.length : "—"}`, label: "Categorías" },
             { num: "14 días", label: "Préstamo" },
           ].map((s) => (
             <div className="hero-stat-pill" key={s.label}>
@@ -244,12 +173,16 @@ export default function Home() {
 
         <div className="hero-dots">
           {slides.map((_, i) => (
-            <button key={i} className={`hero-dot${i === currentSlide ? " active" : ""}`} onClick={() => setCurrentSlide(i)} />
+            <button
+              key={i}
+              className={`hero-dot${i === currentSlide ? " active" : ""}`}
+              onClick={() => setCurrentSlide(i)}
+            />
           ))}
         </div>
       </section>
 
-      {/* ══ CATEGORÍAS desde BD ══ */}
+      {/* ══ CATEGORÍAS ══ */}
       {categoriasDestacadas.length > 0 && (
         <section className="section">
           <p className="section-label">Explora por área</p>
@@ -276,7 +209,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* ══ LIBROS DESTACADOS desde BD ══ */}
+      {/* ══ LIBROS DESTACADOS ══ */}
       <section className="section">
         <p className="section-label">Libros Destacados</p>
         <h2 className="section-title">Los más recientes</h2>
@@ -303,10 +236,7 @@ export default function Home() {
                     <button className="btn-ver" onClick={() => navigate("/libros")}>
                       Ver catálogo
                     </button>
-                    <button
-                      className="btn-apartar"
-                      onClick={() => navigate("/libros")}
-                    >
+                    <button className="btn-apartar" onClick={() => navigate("/libros")}>
                       {usuario ? "Solicitar" : "Inicia sesión"}
                     </button>
                   </div>

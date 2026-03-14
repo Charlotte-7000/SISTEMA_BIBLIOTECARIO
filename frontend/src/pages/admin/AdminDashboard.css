@@ -1,126 +1,323 @@
 /* src/pages/admin/AdminDashboard.css */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+
 .adash-page {
-  padding: 36px 40px;
+  padding: 40px 44px;
   min-height: 100vh;
   background: var(--admin-bg);
   color: var(--admin-text);
+  font-family: 'DM Sans', sans-serif;
 }
 
+/* ── Header ── */
 .adash-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 20px;
+}
+
+.adash-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--admin-accent);
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .adash-title {
-  font-size: 28px;
-  font-weight: 700;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 36px;
+  font-weight: 400;
   color: var(--admin-text);
-  font-family: Georgia, serif;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  line-height: 1.1;
+}
+
+.adash-title-accent {
+  color: var(--admin-accent);
+  font-style: italic;
 }
 
 .adash-sub {
-  font-size: 14px;
-  color: var(--admin-muted);
-  font-family: sans-serif;
-}
-
-.adash-fecha {
   font-size: 13px;
   color: var(--admin-muted);
-  font-family: sans-serif;
-  text-transform: capitalize;
-  padding: 8px 14px;
+  font-weight: 300;
+}
+
+/* Reloj */
+.adash-clock {
+  text-align: right;
+  padding: 14px 20px;
   background: var(--admin-card-bg);
-  border-radius: 8px;
   border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  min-width: 200px;
+}
+
+.adash-clock-time {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 28px;
+  color: var(--admin-text);
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.adash-clock-date {
+  font-size: 11px;
+  color: var(--admin-muted);
+  text-transform: capitalize;
+  font-weight: 400;
+}
+
+/* ── Alerta ── */
+.adash-alerta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(248, 113, 113, 0.07);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 10px;
+  margin-bottom: 28px;
+  font-size: 13px;
+  color: #fca5a5;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.adash-alerta-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #f87171;
+  flex-shrink: 0;
+  animation: pulse-red 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.4); }
 }
 
 /* ── Grid de tarjetas ── */
 .adash-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 16px;
+  margin-bottom: 28px;
 }
 
+/* ── Tarjeta ── */
 .adash-card {
+  position: relative;
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
-  border-radius: 12px;
-  padding: 24px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: transform 0.15s, box-shadow 0.15s;
+  border-radius: 16px;
+  padding: 24px 22px 20px;
+  overflow: hidden;
+  cursor: default;
+  animation: cardIn 0.4s ease both;
+  animation-delay: var(--delay, 0ms);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .adash-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  border-color: var(--accent);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Glow de fondo sutil */
+.adash-card-glow {
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: var(--accent, #60a5fa);
+  opacity: 0.06;
+  filter: blur(30px);
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.adash-card:hover .adash-card-glow { opacity: 0.14; }
+
+/* Línea izquierda de color */
+.adash-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 16px; bottom: 16px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent, #60a5fa);
+}
+
+.adash-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
 .adash-card-icon {
-  font-size: 28px;
-  flex-shrink: 0;
-}
-
-.adash-card-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.adash-card-value {
-  font-size: 32px;
-  font-weight: 700;
-  font-family: Georgia, serif;
+  font-size: 22px;
   line-height: 1;
 }
 
-.adash-card-label {
-  font-size: 12px;
-  color: var(--admin-muted);
-  font-family: sans-serif;
+.adash-card-indicator {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent, #60a5fa);
+  opacity: 0.7;
 }
 
-/* Colores por tipo */
-.adash-card-blue   .adash-card-value { color: #60a5fa; }
-.adash-card-purple .adash-card-value { color: #a78bfa; }
-.adash-card-green  .adash-card-value { color: var(--admin-success); }
-.adash-card-red    .adash-card-value { color: var(--admin-danger); }
-.adash-card-yellow .adash-card-value { color: var(--admin-warning); }
-.adash-card-orange .adash-card-value { color: #fb923c; }
+.adash-card-num {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 44px;
+  font-weight: 400;
+  color: var(--accent, #60a5fa);
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: -1px;
+}
 
-.adash-card-blue   { border-left: 3px solid #60a5fa; }
-.adash-card-purple { border-left: 3px solid #a78bfa; }
-.adash-card-green  { border-left: 3px solid var(--admin-success); }
-.adash-card-red    { border-left: 3px solid var(--admin-danger); }
-.adash-card-yellow { border-left: 3px solid var(--admin-warning); }
-.adash-card-orange { border-left: 3px solid #fb923c; }
+.adash-card-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--admin-text);
+  margin-bottom: 2px;
+}
 
-/* Loading */
+.adash-card-sublabel {
+  font-size: 11px;
+  color: var(--admin-muted);
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+/* Mini barra inferior */
+.adash-card-bar {
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.adash-card-bar-fill {
+  height: 100%;
+  background: var(--accent, #60a5fa);
+  border-radius: 2px;
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.6;
+}
+
+/* ── Resumen de actividad ── */
+.adash-resumen {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  padding: 24px 24px 20px;
+}
+
+.adash-resumen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.adash-resumen-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-text);
+  letter-spacing: 0.3px;
+}
+
+.adash-resumen-total {
+  font-size: 12px;
+  color: var(--admin-muted);
+  font-weight: 300;
+}
+
+.adash-resumen-bar {
+  height: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  gap: 2px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.04);
+}
+
+.adash-bar-seg {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.seg-green  { background: #34d399; }
+.seg-red    { background: #f87171; }
+.seg-yellow { background: #fbbf24; }
+
+.adash-resumen-leyenda {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.adash-ley-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--admin-muted);
+}
+
+.adash-ley-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-green  { background: #34d399; }
+.dot-red    { background: #f87171; }
+.dot-yellow { background: #fbbf24; }
+
+/* ── Loading ── */
 .adash-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 80px 0;
+  padding: 100px 0;
   color: var(--admin-muted);
-  font-family: sans-serif;
 }
 
 .adash-spinner {
   width: 36px; height: 36px;
-  border: 3px solid var(--admin-border);
+  border: 2px solid var(--admin-border);
   border-top-color: var(--admin-accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .adash-page { padding: 24px 20px; }
+  .adash-title { font-size: 28px; }
+  .adash-clock { min-width: unset; text-align: left; }
+  .adash-grid { grid-template-columns: 1fr 1fr; }
+  .adash-card-num { font-size: 36px; }
+}

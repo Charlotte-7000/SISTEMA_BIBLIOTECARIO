@@ -140,6 +140,45 @@
 }
 .aprest-btn-devolver:hover { background: rgba(16,185,129,0.1); }
 
+/* ── Paginación ── */
+.aprest-pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 16px 14px;
+  border-top: 1px solid var(--admin-border);
+  font-family: sans-serif;
+}
+
+.aprest-pg-btn {
+  padding: 7px 14px; border-radius: 7px;
+  border: 1px solid var(--admin-border);
+  background: none; color: var(--admin-muted);
+  font-size: 13px; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.aprest-pg-btn:hover:not(:disabled) {
+  background: var(--admin-border); color: var(--admin-text);
+}
+.aprest-pg-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.aprest-pg-nums { display: flex; gap: 4px; align-items: center; }
+
+.aprest-pg-num {
+  width: 34px; height: 34px; border-radius: 7px;
+  border: 1px solid var(--admin-border);
+  background: none; color: var(--admin-muted);
+  font-size: 13px; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.aprest-pg-num:hover:not(.active) { background: var(--admin-border); color: var(--admin-text); }
+.aprest-pg-num.active {
+  background: var(--admin-accent); color: #fff;
+  border-color: var(--admin-accent); font-weight: 700;
+}
+
+.aprest-pg-ellipsis {
+  color: var(--admin-muted); font-size: 13px; padding: 0 4px;
+}
+
 /* Empty / Loading */
 .aprest-empty {
   text-align: center; padding: 60px;
@@ -226,6 +265,66 @@
 .aprest-form-group input:focus,
 .aprest-form-group select:focus { border-color: var(--admin-accent); }
 .aprest-form-group select option { background: var(--admin-card-bg); }
+
+/* ── Buscador de libro con dropdown ── */
+.aprest-libro-search-wrap {
+  position: relative;
+}
+
+.aprest-libro-search-wrap input {
+  width: 100%; padding: 10px 36px 10px 12px;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px; color: var(--admin-text);
+  font-size: 14px; font-family: sans-serif; outline: none;
+  transition: border-color 0.2s; box-sizing: border-box;
+}
+.aprest-libro-search-wrap input:focus { border-color: var(--admin-accent); }
+
+.aprest-libro-check {
+  position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: #10b981; font-size: 16px; pointer-events: none;
+}
+
+.aprest-libro-dropdown {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px; z-index: 50;
+  max-height: 240px; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.aprest-libro-option {
+  display: flex; flex-direction: column; gap: 2px;
+  width: 100%; padding: 10px 14px;
+  background: none; border: none;
+  border-bottom: 1px solid var(--admin-border);
+  text-align: left; cursor: pointer;
+  transition: background 0.15s;
+}
+.aprest-libro-option:last-child { border-bottom: none; }
+.aprest-libro-option:hover { background: rgba(255,255,255,0.05); }
+
+.aplo-titulo {
+  font-size: 13px; font-weight: 600;
+  color: var(--admin-text); font-family: sans-serif;
+}
+.aplo-autor {
+  font-size: 12px; color: var(--admin-muted); font-family: sans-serif;
+}
+
+.aprest-libro-empty {
+  padding: 14px; font-size: 13px;
+  color: var(--admin-muted); font-family: sans-serif;
+  text-align: center; margin: 0;
+}
+
+.aprest-libro-selecto {
+  font-size: 12px; color: #10b981;
+  font-family: sans-serif; margin: 4px 0 0;
+}
 
 /* Devolución */
 .aprest-dev-ico { font-size: 40px; text-align: center; margin-bottom: 12px; }

@@ -4,6 +4,8 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { getLibros, getCategorias, crearApartado, crearPrestamo, type Libro, type Categoria } from "../services/api"
 import "./Libros.css"
 
+const POR_PAGINA = 12
+
 interface ModalApartado {
   libro: Libro
   tipo: 'apartar' | 'prestar'
@@ -22,7 +24,8 @@ export default function Libros() {
   const [modal,        setModal]      = useState<ModalApartado | null>(null)
   const [accionando,   setAccionando] = useState(false)
   const [msg,          setMsg]        = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null)
-  const [diasApartado, setDiasApartado] = useState<3 | 5 | 7>(3)
+  const [diasPrestamo, setDiasPrestamo] = useState<3 | 5 | 7>(7)
+  const [pagina,       setPagina]     = useState(1)
 
   const usuario = JSON.parse(localStorage.getItem("usuario") || "null")
 
@@ -33,6 +36,7 @@ export default function Libros() {
   useEffect(() => {
     setCargando(true)
     setError("")
+    setPagina(1)
     getLibros(busqueda, categoria)
       .then(data => { setLibros(data); setCargando(false) })
       .catch(() => { setError("No se pudieron cargar los libros"); setCargando(false) })
@@ -48,10 +52,9 @@ export default function Libros() {
     if (!usuario) { navigate("/login"); return }
     setAccionando(true)
     try {
-      await crearApartado(modal.libro.libro_id, diasApartado)
-      mostrar('ok', `"${modal.libro.libro_titulo}" apartado correctamente. Tienes ${diasApartado} días para recogerlo.`)
+      await crearApartado(modal.libro.libro_id)
+      mostrar('ok', `"${modal.libro.libro_titulo}" apartado correctamente. El sistema tiene hasta 5 días para asignártelo y luego tendrás 3 días para recogerlo.`)
       setModal(null)
-      setDiasApartado(3)
       getLibros(busqueda, categoria).then(setLibros)
     } catch (e: any) {
       mostrar('err', e.message)
@@ -66,9 +69,10 @@ export default function Libros() {
     if (!usuario) { navigate("/login"); return }
     setAccionando(true)
     try {
-      await crearPrestamo(modal.libro.libro_id)
-      mostrar('ok', `Préstamo de "${modal.libro.libro_titulo}" creado. Tienes 14 días para devolverlo.`)
+      await crearPrestamo(modal.libro.libro_id, diasPrestamo)
+      mostrar('ok', `Préstamo de "${modal.libro.libro_titulo}" creado. Tienes ${diasPrestamo} días para devolverlo.`)
       setModal(null)
+      setDiasPrestamo(7)
       getLibros(busqueda, categoria).then(setLibros)
     } catch (e: any) {
       mostrar('err', e.message)
@@ -80,8 +84,17 @@ export default function Libros() {
 
   const abrirModal = (libro: Libro, tipo: 'apartar' | 'prestar') => {
     if (!usuario) { navigate("/login"); return }
-    setDiasApartado(3)
+    setDiasPrestamo(7)
     setModal({ libro, tipo })
+  }
+
+  // ── Paginado ──
+  const totalPaginas  = Math.ceil(libros.length / POR_PAGINA)
+  const librosPagina  = libros.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA)
+
+  const irPagina = (p: number) => {
+    setPagina(p)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -145,7 +158,12 @@ export default function Libros() {
             ))}
           </select>
           <div className="filtro-results">
-            {!cargando && <span>{libros.length} resultado{libros.length !== 1 ? 's' : ''}</span>}
+            {!cargando && (
+              <span>
+                {libros.length} resultado{libros.length !== 1 ? 's' : ''}
+                {totalPaginas > 1 && ` · página ${pagina} de ${totalPaginas}`}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -173,42 +191,87 @@ export default function Libros() {
             </button>
           </div>
         ) : (
-          <div className="libros-grid">
-            {libros.map(libro => (
-              <div key={libro.libro_id} className="libro-card">
-                <div className="libro-card-top">
-                  <span className={`libro-badge ${libro.libro_ejemplares > 0 ? "disponible" : "agotado"}`}>
-                    {libro.libro_ejemplares > 0 ? `${libro.libro_ejemplares} disponibles` : "Agotado"}
-                  </span>
-                </div>
-                <div className="libro-body">
-                  <span className="libro-categoria">{libro.categoria_nombre}</span>
-                  <p className="libro-titulo">{libro.libro_titulo}</p>
-                  <p className="libro-autor">{libro.libro_autor}</p>
-                  {libro.libro_descripcion && (
-                    <p className="libro-desc">{libro.libro_descripcion}</p>
-                  )}
-                  <p className="libro-isbn">ISBN: {libro.libro_isbn}</p>
-                </div>
-                <div className="libro-acciones">
-                  {libro.libro_ejemplares > 0 ? (
-                    <>
-                      <button className="btn-prestar" onClick={() => abrirModal(libro, 'prestar')}>
-                        Solicitar préstamo
+          <>
+            <div className="libros-grid">
+              {librosPagina.map(libro => (
+                <div key={libro.libro_id} className="libro-card">
+                  <div className="libro-card-top">
+                    <span className={`libro-badge ${libro.libro_ejemplares > 0 ? "disponible" : "agotado"}`}>
+                      {libro.libro_ejemplares > 0 ? `${libro.libro_ejemplares} disponibles` : "Agotado"}
+                    </span>
+                  </div>
+                  <div className="libro-body">
+                    <span className="libro-categoria">{libro.categoria_nombre}</span>
+                    <p className="libro-titulo">{libro.libro_titulo}</p>
+                    <p className="libro-autor">{libro.libro_autor}</p>
+                    {libro.libro_descripcion && (
+                      <p className="libro-desc">{libro.libro_descripcion}</p>
+                    )}
+                    <p className="libro-isbn">ISBN: {libro.libro_isbn}</p>
+                  </div>
+                  <div className="libro-acciones">
+                    {libro.libro_ejemplares > 0 ? (
+                      <>
+                        <button className="btn-prestar" onClick={() => abrirModal(libro, 'prestar')}>
+                          Solicitar préstamo
+                        </button>
+                        <button className="btn-apartar-outline" onClick={() => abrirModal(libro, 'apartar')}>
+                          Apartar
+                        </button>
+                      </>
+                    ) : (
+                      <button className="btn-apartar-agotado" onClick={() => abrirModal(libro, 'apartar')}>
+                        🔖 Apartar para cuando esté disponible
                       </button>
-                      <button className="btn-apartar-outline" onClick={() => abrirModal(libro, 'apartar')}>
-                        Apartar
-                      </button>
-                    </>
-                  ) : (
-                    <button className="btn-apartar-agotado" onClick={() => abrirModal(libro, 'apartar')}>
-                      🔖 Apartar para cuando esté disponible
-                    </button>
-                  )}
+                    )}
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {/* ── Paginador ── */}
+            {totalPaginas > 1 && (
+              <div className="libros-paginador">
+                <button
+                  className="pag-btn"
+                  onClick={() => irPagina(pagina - 1)}
+                  disabled={pagina === 1}
+                >
+                  ← Anterior
+                </button>
+
+                <div className="pag-nums">
+                  {Array.from({ length: totalPaginas }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === totalPaginas || Math.abs(p - pagina) <= 1)
+                    .reduce<(number | '...')[]>((acc, p, idx, arr) => {
+                      if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push('...')
+                      acc.push(p)
+                      return acc
+                    }, [])
+                    .map((p, idx) =>
+                      p === '...'
+                        ? <span key={`ellipsis-${idx}`} className="pag-ellipsis">…</span>
+                        : <button
+                            key={p}
+                            className={`pag-num ${pagina === p ? 'activo' : ''}`}
+                            onClick={() => irPagina(p as number)}
+                          >
+                            {p}
+                          </button>
+                    )
+                  }
+                </div>
+
+                <button
+                  className="pag-btn"
+                  onClick={() => irPagina(pagina + 1)}
+                  disabled={pagina === totalPaginas}
+                >
+                  Siguiente →
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
@@ -236,8 +299,8 @@ export default function Libros() {
                   </div>
                   <div className="libros-modal-info-sep" />
                   <div className="libros-modal-info-item">
-                    <span className="lmi-label">Duración</span>
-                    <span className="lmi-val">14 días</span>
+                    <span className="lmi-label">Duración elegida</span>
+                    <span className="lmi-val">{diasPrestamo} días</span>
                   </div>
                   <div className="libros-modal-info-sep" />
                   <div className="libros-modal-info-item">
@@ -254,24 +317,32 @@ export default function Libros() {
                     </span>
                   </div>
                   <div className="libros-modal-info-sep" />
+                  {modal.libro.libro_ejemplares === 0 && (
+                    <>
+                      <div className="libros-modal-info-item">
+                        <span className="lmi-label">Espera máxima</span>
+                        <span className="lmi-val">5 días</span>
+                      </div>
+                      <div className="libros-modal-info-sep" />
+                    </>
+                  )}
                   <div className="libros-modal-info-item">
-                    <span className="lmi-label">Vigencia del apartado</span>
-                    <span className="lmi-val">{diasApartado} días</span>
+                    <span className="lmi-label">Tiempo para recoger</span>
+                    <span className="lmi-val">3 días</span>
                   </div>
                 </>
               )}
             </div>
 
-            {/* Selector de días solo para apartado */}
-            {modal.tipo === 'apartar' && (
+            {modal.tipo === 'prestar' && (
               <div className="libros-dias-selector">
                 <span className="libros-dias-label">¿Cuántos días necesitas?</span>
                 <div className="libros-dias-opciones">
                   {([3, 5, 7] as const).map(d => (
                     <button
                       key={d}
-                      className={`libros-dia-btn ${diasApartado === d ? 'activo' : ''}`}
-                      onClick={() => setDiasApartado(d)}
+                      className={`libros-dia-btn ${diasPrestamo === d ? 'activo' : ''}`}
+                      onClick={() => setDiasPrestamo(d)}
                     >
                       {d} días
                     </button>
@@ -282,8 +353,10 @@ export default function Libros() {
 
             <p className="libros-modal-aviso">
               {modal.tipo === 'prestar'
-                ? 'Al confirmar, el libro quedará registrado a tu nombre. Debes devolverlo en biblioteca dentro de 14 días. Si hay retraso, tu cuenta será bloqueada 1 día por cada día de retraso.'
-                : `Al apartar, tienes ${diasApartado} días para pasar a recoger el libro. Si no lo recoges, el apartado expira automáticamente.`
+                ? `Al confirmar, el libro quedará registrado a tu nombre. Debes devolverlo en biblioteca dentro de ${diasPrestamo} días. Si hay retraso, tu cuenta será bloqueada 1 día por cada día de retraso.`
+                : modal.libro.libro_ejemplares > 0
+                  ? 'El libro está disponible y será asignado a tu nombre de inmediato. Tendrás 3 días para pasar a recogerlo en biblioteca antes de que el apartado expire.'
+                  : 'El libro no está disponible. Te anotaremos en lista de espera. Si en 5 días no se libera un ejemplar, el apartado se cancelará automáticamente. Una vez asignado, tendrás 3 días para recogerlo.'
               }
             </p>
 
@@ -302,6 +375,51 @@ export default function Libros() {
           </div>
         </div>
       )}
+
+      {/* ══ FOOTER ══ */}
+      <footer className="home-footer">
+        <div className="footer-grid">
+          <div>
+            <div className="footer-logo-row">
+              <div className="footer-logo-icon">B</div>
+              <span className="footer-logo-text">Biblioteca WEB</span>
+            </div>
+            <p className="footer-tagline">
+              Tu portal de acceso al conocimiento académico. Préstamos, apartados y recursos digitales en un solo lugar.
+            </p>
+          </div>
+          <div>
+            <p className="footer-heading">Navegación</p>
+            {[["Catálogo", "/libros"], ["Préstamos", "/prestamos"], ["Apartados", "/apartados"]].map(([l, r]) => (
+              <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
+            ))}
+          </div>
+          <div>
+            <p className="footer-heading">Cuenta</p>
+            {usuario
+              ? [["Mis préstamos", "/prestamos"], ["Mis apartados", "/apartados"]].map(([l, r]) => (
+                  <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
+                ))
+              : [["Iniciar sesión", "/login"], ["Registrarse", "/registro"]].map(([l, r]) => (
+                  <p key={l} className="footer-link" onClick={() => navigate(r)}>{l}</p>
+                ))
+            }
+          </div>
+          <div>
+            <p className="footer-heading">Boletín informativo</p>
+            <p className="footer-desc">Recibe novedades directamente en tu correo institucional.</p>
+            <div className="newsletter-row">
+              <input className="newsletter-input" placeholder="tu@alumno.web.mx" />
+              <button className="newsletter-btn">Suscribir</button>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2025 Biblioteca WEB · Todos los derechos reservados</span>
+          <span>Privacidad · Términos de uso · Accesibilidad</span>
+        </div>
+      </footer>
+
     </div>
   )
 }

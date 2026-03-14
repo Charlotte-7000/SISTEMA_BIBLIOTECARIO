@@ -25,7 +25,7 @@
 .registro-panel-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(193, 150, 218, 0.75), rgba(9, 109, 217, 0.85));
+  background: linear-gradient(135deg, rgba(193, 150, 218, 0.75), rgba(26, 67, 111, 0.85));
 }
 
 .registro-panel-texto {

@@ -1,5 +1,12 @@
 from django.db import models
 
+# ─────────────────────────────────────────
+# Constantes globales
+# ─────────────────────────────────────────
+DIAS_ESPERA_APARTADO = 5          # días máximos para asignar un apartado Pendiente
+DIAS_RECOGIDA        = 3          # días para recoger un apartado Asignado
+DIAS_PRESTAMO_OPTS   = [3, 5, 7]  # opciones válidas de días de préstamo
+
 
 class Usuario(models.Model):
     ROL_CHOICES = [
@@ -62,6 +69,7 @@ class Prestamo(models.Model):
     prestamo_fecha_entrega_esperada = models.DateField()
     prestamo_fecha_devolucion_real  = models.DateField(null=True, blank=True)
     prestamo_estatus                = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='Activo')
+    prestamo_dias_plazo             = models.IntegerField(null=True, blank=True)
 
     class Meta:
         db_table = 'prestamos'
@@ -69,16 +77,19 @@ class Prestamo(models.Model):
 
 class Apartado(models.Model):
     ESTATUS_CHOICES = [
-        ('Activo',     'Activo'),
+        ('Pendiente',  'Pendiente'),
+        ('Asignado',   'Asignado'),
         ('Cancelado',  'Cancelado'),
         ('Convertido', 'Convertido'),
     ]
-    apartado_id               = models.AutoField(primary_key=True)
-    usuario                   = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
-    libro                     = models.ForeignKey(Libro, on_delete=models.CASCADE, db_column='libro_id')
-    apartado_fecha            = models.DateField()
-    apartado_fecha_expiracion = models.DateField()
-    apartado_estatus          = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='Activo')
+    apartado_id                    = models.AutoField(primary_key=True)
+    usuario                        = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
+    libro                          = models.ForeignKey(Libro, on_delete=models.CASCADE, db_column='libro_id')
+    apartado_fecha                 = models.DateField()
+    apartado_fecha_expiracion      = models.DateField()
+    apartado_fecha_asignacion      = models.DateField(null=True, blank=True)
+    apartado_fecha_limite_recogida = models.DateField(null=True, blank=True)
+    apartado_estatus               = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='Pendiente')
 
     class Meta:
         db_table = 'apartados'

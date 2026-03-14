@@ -109,10 +109,43 @@
 .td-bold  { font-weight: 600; }
 .td-muted { color: var(--admin-muted); font-size: 12px; }
 
+/* ── Semáforo de ejemplares ── */
 .alib-ej {
-  font-weight: 700; color: #10b981;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  white-space: nowrap;
 }
-.alib-ej.cero { color: #ef4444; }
+
+/* 0 ejemplares → rojo (agotado) */
+.alib-ej.cero {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* 1-2 ejemplares → naranja (crítico) */
+.alib-ej.bajo {
+  color: #f97316;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+/* 3-5 ejemplares → amarillo (limitado) */
+.alib-ej.medio {
+  color: #eab308;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+/* 6+ ejemplares → verde (disponible) */
+.alib-ej.alto {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
 
 .alib-acciones { display: flex; gap: 8px; }
 
@@ -305,3 +338,42 @@
 }
 .alib-btn-del-confirm:hover:not(:disabled) { background: #b91c1c; }
 .alib-btn-del-confirm:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Paginación ── */
+.alib-pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 16px 14px;
+  border-top: 1px solid var(--admin-border);
+  font-family: sans-serif;
+}
+
+.alib-pg-btn {
+  padding: 7px 14px; border-radius: 7px;
+  border: 1px solid var(--admin-border);
+  background: none; color: var(--admin-muted);
+  font-size: 13px; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.alib-pg-btn:hover:not(:disabled) {
+  background: var(--admin-border); color: var(--admin-text);
+}
+.alib-pg-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.alib-pg-nums { display: flex; gap: 4px; align-items: center; }
+
+.alib-pg-num {
+  width: 34px; height: 34px; border-radius: 7px;
+  border: 1px solid var(--admin-border);
+  background: none; color: var(--admin-muted);
+  font-size: 13px; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.alib-pg-num:hover:not(.active) { background: var(--admin-border); color: var(--admin-text); }
+.alib-pg-num.active {
+  background: var(--admin-accent); color: #fff;
+  border-color: var(--admin-accent); font-weight: 700;
+}
+
+.alib-pg-ellipsis {
+  color: var(--admin-muted); font-size: 13px; padding: 0 4px;
+}

@@ -9,6 +9,19 @@ function headers() {
   };
 }
 
+// ── HELPER: maneja 401 globalmente ───────────────────────────────────────────
+
+async function fetchAuth(url: string, options: RequestInit = {}) {
+  const r = await fetch(url, { ...options, headers: headers() });
+  if (r.status === 401) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    window.location.href = '/login';
+    throw new Error('Sesión expirada');
+  }
+  return r;
+}
+
 // ── TIPOS ─────────────────────────────────────────────────────────────────────
 
 export interface Usuario {
@@ -48,6 +61,7 @@ export interface Prestamo {
   prestamo_fecha_entrega_esperada: string;
   prestamo_fecha_devolucion_real: string | null;
   prestamo_estatus: 'Activo' | 'Devuelto' | 'Vencido';
+  prestamo_dias_plazo: number | null;
   dias_retraso: number;
 }
 
@@ -58,10 +72,9 @@ export interface Apartado {
   libro_autor: string;
   apartado_fecha: string;
   apartado_fecha_expiracion: string;
-  apartado_estatus: 'Activo' | 'Cancelado' | 'Convertido';
+  apartado_estatus: "Pendiente" | "Asignado" | "Cancelado" | "Convertido"; 
   dias_restantes: number;
 }
-
 export interface Multa {
   multa_id: number;
   prestamo_id: number;
@@ -123,16 +136,15 @@ export async function getCategorias() {
 // ── PRÉSTAMOS ─────────────────────────────────────────────────────────────────
 
 export async function getPrestamos() {
-  const r = await fetch(`${BASE}/prestamos/`, { headers: headers() });
+  const r = await fetchAuth(`${BASE}/prestamos/`);
   if (!r.ok) throw new Error('Error al obtener préstamos');
   return r.json() as Promise<Prestamo[]>;
 }
 
-export async function crearPrestamo(libro_id: number) {
-  const r = await fetch(`${BASE}/prestamos/`, {
+export async function crearPrestamo(libro_id: number, dias_plazo: 3 | 5 | 7 = 7) {
+  const r = await fetchAuth(`${BASE}/prestamos/`, {
     method: 'POST',
-    headers: headers(),
-    body: JSON.stringify({ libro_id }),
+    body: JSON.stringify({ libro_id, dias_plazo }),
   });
   const d = await r.json();
   if (!r.ok) throw new Error(d.error || 'Error al crear préstamo');
@@ -142,15 +154,14 @@ export async function crearPrestamo(libro_id: number) {
 // ── APARTADOS ─────────────────────────────────────────────────────────────────
 
 export async function getApartados() {
-  const r = await fetch(`${BASE}/apartados/`, { headers: headers() });
+  const r = await fetchAuth(`${BASE}/apartados/`);
   if (!r.ok) throw new Error('Error al obtener apartados');
   return r.json() as Promise<Apartado[]>;
 }
 
 export async function crearApartado(libro_id: number, dias_apartado: 3 | 5 | 7 = 3) {
-  const r = await fetch(`${BASE}/apartados/`, {
+  const r = await fetchAuth(`${BASE}/apartados/`, {
     method: 'POST',
-    headers: headers(),
     body: JSON.stringify({ libro_id, dias_apartado }),
   });
   const d = await r.json();
@@ -159,10 +170,9 @@ export async function crearApartado(libro_id: number, dias_apartado: 3 | 5 | 7 =
 }
 
 export async function cancelarApartado(apartado_id: number) {
-  const r = await fetch(`${BASE}/apartados/${apartado_id}/`, {
+  const r = await fetchAuth(`${BASE}/apartados/${apartado_id}/`, {
     method: 'PATCH',
-    headers: headers(),
-    body: JSON.stringify({}),
+    body: JSON.stringify({ apartado_estatus: 'Cancelado' }),
   });
   const d = await r.json();
   if (!r.ok) throw new Error(d.error || 'Error al cancelar');
@@ -172,7 +182,7 @@ export async function cancelarApartado(apartado_id: number) {
 // ── MULTAS ────────────────────────────────────────────────────────────────────
 
 export async function getMultas() {
-  const r = await fetch(`${BASE}/multas/`, { headers: headers() });
+  const r = await fetchAuth(`${BASE}/multas/`);
   if (!r.ok) throw new Error('Error al obtener multas');
   return r.json() as Promise<Multa[]>;
 }
