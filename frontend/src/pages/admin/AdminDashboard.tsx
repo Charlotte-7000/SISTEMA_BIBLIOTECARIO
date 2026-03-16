@@ -1,5 +1,5 @@
 // src/pages/admin/AdminDashboard.tsx
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import './AdminDashboard.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
