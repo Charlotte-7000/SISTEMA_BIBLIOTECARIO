@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import './AdminLibros.css';
 
-const API = 'http://localhost:8000/api';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 interface Libro {
   libro_id:         number;
