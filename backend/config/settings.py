@@ -125,6 +125,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5174",
     "http://localhost:3000",
 ]
-
 if NETLIFY_URL:
     CORS_ALLOWED_ORIGINS.append(NETLIFY_URL)
