@@ -828,3 +828,67 @@ nav {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media (max-width: 1024px) {
+  .header-inner { padding: 0 24px; }
+  .search-bar, .home-search-bar { padding: 11px 24px; }
+  .section { padding: 64px 24px 0; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .home-footer { padding: 48px 24px 24px; }
+  .mosaic-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .mosaic-card.large { grid-row: span 1; }
+  .hero-stats { display: none; }
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-wrap: wrap; height: auto;
+    padding: 10px 16px; gap: 6px;
+  }
+  .logo-wrap {
+    border-right: none; padding-right: 0; margin-right: 0;
+    height: auto; width: 100%; justify-content: center;
+  }
+  nav { justify-content: center; width: 100%; }
+  .nav-list { justify-content: center; flex-wrap: wrap; gap: 0; }
+  .nav-item { padding: 8px 10px; font-size: 13px; }
+  .nav-item::after { display: none; }
+  .header-actions {
+    border-left: none; padding-left: 0; height: auto;
+    justify-content: center; width: 100%; margin-left: 0;
+  }
+  .banner-grid { grid-template-columns: 1fr; }
+  .hero-section { height: 460px; }
+  .slide-headline { font-size: 38px; }
+  .home-search-bar { top: 120px; }
+
+  /* Search bar no se corta */
+  .search-bar { padding: 10px 12px; }
+  .search-wrap { padding: 0 4px 0 12px; gap: 6px; width: 100%; }
+  .search-select { display: none; }
+  .search-divider { display: none; }
+  .search-btn { padding: 8px 14px; font-size: 12px; flex-shrink: 0; }
+  .search-input { font-size: 13px; }
+
+  /* Botones hero apilados mejor */
+  .slide-actions { flex-direction: column; gap: 10px; width: fit-content; }
+  .slide-cta, .slide-cta-ghost { padding: 11px 22px; font-size: 13px; text-align: center; }
+}
+
+@media (max-width: 600px) {
+  .hero-section { height: 420px; }
+  .slide-headline { font-size: 28px; }
+  .slide-sub { font-size: 14px; margin-bottom: 24px; }
+  .slide-content { left: 5%; max-width: 88%; top: 52%; }
+  .mosaic-grid { grid-template-columns: 1fr; }
+  .libros-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .section { padding: 40px 16px 0; }
+  .search-bar, .home-search-bar { padding: 10px 12px; }
+  .banner-card { height: 240px; }
+  .banner-title { font-size: 22px; }
+  .section-title { font-size: 24px; }
+}
