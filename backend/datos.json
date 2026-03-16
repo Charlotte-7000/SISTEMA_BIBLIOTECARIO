@@ -1,0 +1,1290 @@
+[
+{
+  "model": "biblioteca.usuario",
+  "pk": 1,
+  "fields": {
+    "matricula_id": "20200902",
+    "usuario_nombre": "Maria",
+    "usuario_aPaterno": "Robles",
+    "usuario_aMaterno": "Trejo",
+    "usuario_password": "pbkdf2_sha256$1000000$ZhOOIWPXxLVEbeeiFwE3kT$vuN0VIDXKhqrZUSFha1gv0CEfZ6TNPvBPtcABntNfxs=",
+    "usuario_rol": "usuario",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 2,
+  "fields": {
+    "matricula_id": "2024UTT019",
+    "usuario_nombre": "Itzel",
+    "usuario_aPaterno": "Conde",
+    "usuario_aMaterno": "Ramos",
+    "usuario_password": "pbkdf2_sha256$1000000$fV1fFnIIj6lBqQ7A0WgIQj$r7tF2+8DoeGK+WQLEtSRR7HbI+xzX83P26o75yQZLJo=",
+    "usuario_rol": "admin",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 3,
+  "fields": {
+    "matricula_id": "2024UTT020",
+    "usuario_nombre": "Silvestre",
+    "usuario_aPaterno": "Flores",
+    "usuario_aMaterno": "Fernandez",
+    "usuario_password": "pbkdf2_sha256$1000000$4yn4ZQtueAtCbSUEUKFkSC$wEuUSw+f1oeXULRGWccdxZi2U2utvN+akhPwOIt96ZQ=",
+    "usuario_rol": "admin",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 4,
+  "fields": {
+    "matricula_id": "20200903",
+    "usuario_nombre": "Juan",
+    "usuario_aPaterno": "Parra",
+    "usuario_aMaterno": "Sosa",
+    "usuario_password": "pbkdf2_sha256$1000000$nZkreqI3g0zU4jmUSeykKT$6vvX6mapbMtAiJf/mzuJvAU4tpy+dEi5Aor1QjsR39s=",
+    "usuario_rol": "usuario",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 5,
+  "fields": {
+    "matricula_id": "2023710030",
+    "usuario_nombre": "santiago",
+    "usuario_aPaterno": "conde",
+    "usuario_aMaterno": "ramos",
+    "usuario_password": "pbkdf2_sha256$1000000$c1VMjtyICX6xCQASR3ZAGg$Dxpg1xx3ooySXjB6dmQPoda6T48BV8moaVMjl6RZPYM=",
+    "usuario_rol": "usuario",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 6,
+  "fields": {
+    "matricula_id": "654",
+    "usuario_nombre": "Alejandro",
+    "usuario_aPaterno": "Conde",
+    "usuario_aMaterno": "Ramos",
+    "usuario_password": "pbkdf2_sha256$1000000$oC5c1eX8Pjb17DelOlk3vT$pfrHjp7y5V2dgJx1K4rIdgqo8xJ/Tx/XwL+5sHclqtU=",
+    "usuario_rol": "usuario",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 7,
+  "fields": {
+    "matricula_id": "2021MEC023",
+    "usuario_nombre": "Marian",
+    "usuario_aPaterno": "Ramos",
+    "usuario_aMaterno": "Zarate",
+    "usuario_password": "pbkdf2_sha256$1000000$pMdP6FDLwbqyQGAX8h5TWm$RR8YcxvJRzjvsdVsP8VpDIXgFA5i1UIIu7yBQzhTJ6Q=",
+    "usuario_rol": "usuario",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 8,
+  "fields": {
+    "matricula_id": "2024UTT024",
+    "usuario_nombre": "Charlotte",
+    "usuario_aPaterno": "Nuñez",
+    "usuario_aMaterno": "Hernandez",
+    "usuario_password": "pbkdf2_sha256$1000000$6kOv4Op8KO6RykKz3DxEzx$gRu1dFCJV69jL32u0UJorz6AKLYIVRsODCSZtY96W4E=",
+    "usuario_rol": "admin",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.usuario",
+  "pk": 9,
+  "fields": {
+    "matricula_id": "2024MEC015",
+    "usuario_nombre": "Conde",
+    "usuario_aPaterno": "Ramos",
+    "usuario_aMaterno": "Itzel",
+    "usuario_password": "pbkdf2_sha256$1000000$Rr4Hyw5W1X7bJbANjhsd2H$uDr7TCpmIaumATCbRk7S0Zyx5hwqTLQy94Pzo2N7FZs=",
+    "usuario_rol": "usuario",
+    "usuario_bloqueado_hasta": null
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 1,
+  "fields": {
+    "editorial_nombre": "Pearson"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 2,
+  "fields": {
+    "editorial_nombre": "McGraw Hill"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 3,
+  "fields": {
+    "editorial_nombre": "Trillas"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 4,
+  "fields": {
+    "editorial_nombre": "Springer"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 5,
+  "fields": {
+    "editorial_nombre": "Wiley"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 6,
+  "fields": {
+    "editorial_nombre": "Elsevier"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 7,
+  "fields": {
+    "editorial_nombre": "CRC Press"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 8,
+  "fields": {
+    "editorial_nombre": "Cambridge Press"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 9,
+  "fields": {
+    "editorial_nombre": "Oxford Press"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 10,
+  "fields": {
+    "editorial_nombre": "Addison Wesley"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 11,
+  "fields": {
+    "editorial_nombre": "Cengage"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 12,
+  "fields": {
+    "editorial_nombre": "Prentice Hall"
+  }
+},
+{
+  "model": "biblioteca.editorial",
+  "pk": 13,
+  "fields": {
+    "editorial_nombre": "Alfaomega"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 1,
+  "fields": {
+    "categoria_nombre": "Ciencias Exactas"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 2,
+  "fields": {
+    "categoria_nombre": "Humanidades"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 3,
+  "fields": {
+    "categoria_nombre": "Derecho"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 4,
+  "fields": {
+    "categoria_nombre": "Ciencias de Salud"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 5,
+  "fields": {
+    "categoria_nombre": "Ingenieria Civil"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 6,
+  "fields": {
+    "categoria_nombre": "Ingenieria Industrial"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 7,
+  "fields": {
+    "categoria_nombre": "Ingenieria Mecanica"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 8,
+  "fields": {
+    "categoria_nombre": "Ingenieria Electrica"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 9,
+  "fields": {
+    "categoria_nombre": "Ingenieria Electronica"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 10,
+  "fields": {
+    "categoria_nombre": "Ingenieria en Sistemas"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 11,
+  "fields": {
+    "categoria_nombre": "Ingenieria en Software"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 12,
+  "fields": {
+    "categoria_nombre": "Ingenieria en Telecomunicaciones"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 13,
+  "fields": {
+    "categoria_nombre": "Ingenieria Ambiental"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 14,
+  "fields": {
+    "categoria_nombre": "Ingenieria en Robotica"
+  }
+},
+{
+  "model": "biblioteca.categoria",
+  "pk": 15,
+  "fields": {
+    "categoria_nombre": "Ingenieria en Inteligencia Artificial"
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 1,
+  "fields": {
+    "libro_titulo": "Calculo Diferencial",
+    "libro_autor": "James Stewart",
+    "libro_isbn": "978-0-538-49781-0",
+    "libro_ejemplares": 8,
+    "libro_descripcion": "Libro de calculo universitario",
+    "editorial": 1,
+    "categoria": 1
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 2,
+  "fields": {
+    "libro_titulo": "Introduccion al Derecho",
+    "libro_autor": "Eduardo Garcia",
+    "libro_isbn": "978-970-10-3963-3",
+    "libro_ejemplares": 6,
+    "libro_descripcion": "Fundamentos del derecho",
+    "editorial": 2,
+    "categoria": 3
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 3,
+  "fields": {
+    "libro_titulo": "Anatomia Humana",
+    "libro_autor": "Frank H. Netter",
+    "libro_isbn": "978-0-323-39304-1",
+    "libro_ejemplares": 6,
+    "libro_descripcion": "Atlas de anatomia humana",
+    "editorial": 3,
+    "categoria": 4
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 4,
+  "fields": {
+    "libro_titulo": "Historia de Mexico",
+    "libro_autor": "Enrique Krauze",
+    "libro_isbn": "978-970-19-0341-6",
+    "libro_ejemplares": 12,
+    "libro_descripcion": "Historia moderna de Mexico",
+    "editorial": 1,
+    "categoria": 2
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 5,
+  "fields": {
+    "libro_titulo": "Mecanica de Materiales",
+    "libro_autor": "Ferdinand Beer",
+    "libro_isbn": "978-0073398235",
+    "libro_ejemplares": 7,
+    "libro_descripcion": "Fundamentos de resistencia de materiales",
+    "editorial": 2,
+    "categoria": 7
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 6,
+  "fields": {
+    "libro_titulo": "Ingenieria de Software",
+    "libro_autor": "Ian Sommerville",
+    "libro_isbn": "978-0133943030",
+    "libro_ejemplares": 10,
+    "libro_descripcion": "Conceptos y practicas de ingenieria de software",
+    "editorial": 10,
+    "categoria": 11
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 7,
+  "fields": {
+    "libro_titulo": "Circuitos Electricos",
+    "libro_autor": "James Nilsson",
+    "libro_isbn": "978-0134746968",
+    "libro_ejemplares": 6,
+    "libro_descripcion": "Analisis de circuitos electricos",
+    "editorial": 2,
+    "categoria": 8
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 8,
+  "fields": {
+    "libro_titulo": "Estructuras de Datos",
+    "libro_autor": "Mark Allen Weiss",
+    "libro_isbn": "978-0132847377",
+    "libro_ejemplares": 8,
+    "libro_descripcion": "Estructuras de datos y algoritmos",
+    "editorial": 12,
+    "categoria": 10
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 9,
+  "fields": {
+    "libro_titulo": "Electronica: Teoria de Circuitos",
+    "libro_autor": "Robert Boylestad",
+    "libro_isbn": "978-0133923605",
+    "libro_ejemplares": 8,
+    "libro_descripcion": "Principios de electronica analogica",
+    "editorial": 2,
+    "categoria": 9
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 10,
+  "fields": {
+    "libro_titulo": "Ingenieria Ambiental",
+    "libro_autor": "Gilbert Masters",
+    "libro_isbn": "978-0132339346",
+    "libro_ejemplares": 5,
+    "libro_descripcion": "Principios de ingenieria ambiental",
+    "editorial": 6,
+    "categoria": 13
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 11,
+  "fields": {
+    "libro_titulo": "Sistemas de Control Moderno",
+    "libro_autor": "Richard Dorf",
+    "libro_isbn": "978-0134407623",
+    "libro_ejemplares": 6,
+    "libro_descripcion": "Analisis y diseno de sistemas de control",
+    "editorial": 5,
+    "categoria": 8
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 12,
+  "fields": {
+    "libro_titulo": "Inteligencia Artificial",
+    "libro_autor": "Stuart Russell",
+    "libro_isbn": "978-0136042594",
+    "libro_ejemplares": 7,
+    "libro_descripcion": "Conceptos modernos de inteligencia artificial",
+    "editorial": 8,
+    "categoria": 15
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 13,
+  "fields": {
+    "libro_titulo": "Redes de Computadoras",
+    "libro_autor": "Andrew Tanenbaum",
+    "libro_isbn": "978-0132126953",
+    "libro_ejemplares": 9,
+    "libro_descripcion": "Arquitectura y protocolos de redes",
+    "editorial": 10,
+    "categoria": 12
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 14,
+  "fields": {
+    "libro_titulo": "Robotica Moderna",
+    "libro_autor": "Kevin Lynch",
+    "libro_isbn": "978-1107156302",
+    "libro_ejemplares": 1,
+    "libro_descripcion": "Fundamentos de robotica y automatizacion",
+    "editorial": 8,
+    "categoria": 14
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 15,
+  "fields": {
+    "libro_titulo": "Calculo Vectorial",
+    "libro_autor": "Jerrold Marsden",
+    "libro_isbn": "9780130339676",
+    "libro_ejemplares": 7,
+    "libro_descripcion": "Conceptos avanzados de calculo vectorial",
+    "editorial": 1,
+    "categoria": 1
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 16,
+  "fields": {
+    "libro_titulo": "Analisis Estructural",
+    "libro_autor": "Russell Hibbeler",
+    "libro_isbn": "9780134610672",
+    "libro_ejemplares": 6,
+    "libro_descripcion": "Analisis de estructuras en ingenieria civil",
+    "editorial": 2,
+    "categoria": 5
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 17,
+  "fields": {
+    "libro_titulo": "Termodinamica",
+    "libro_autor": "Yunus Cengel",
+    "libro_isbn": "9780073398174",
+    "libro_ejemplares": 7,
+    "libro_descripcion": "Fundamentos de termodinamica para ingenieria",
+    "editorial": 2,
+    "categoria": 7
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 18,
+  "fields": {
+    "libro_titulo": "Bases de Datos",
+    "libro_autor": "Abraham Silberschatz",
+    "libro_isbn": "9780073523323",
+    "libro_ejemplares": 10,
+    "libro_descripcion": "Conceptos de sistemas de bases de datos",
+    "editorial": 1,
+    "categoria": 10
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 19,
+  "fields": {
+    "libro_titulo": "Programacion en C",
+    "libro_autor": "Brian Kernighan",
+    "libro_isbn": "9780131103627",
+    "libro_ejemplares": 0,
+    "libro_descripcion": "Lenguaje de programacion C y algoritmos",
+    "editorial": 12,
+    "categoria": 10
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 20,
+  "fields": {
+    "libro_titulo": "Diseno de Maquinas",
+    "libro_autor": "Robert Norton",
+    "libro_isbn": "9780133356717",
+    "libro_ejemplares": 5,
+    "libro_descripcion": "Principios de diseno mecanico",
+    "editorial": 5,
+    "categoria": 7
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 21,
+  "fields": {
+    "libro_titulo": "Redes y Comunicaciones",
+    "libro_autor": "William Stallings",
+    "libro_isbn": "9780134444284",
+    "libro_ejemplares": 7,
+    "libro_descripcion": "Protocolos y arquitecturas de red",
+    "editorial": 10,
+    "categoria": 12
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 22,
+  "fields": {
+    "libro_titulo": "Ingenieria de Control",
+    "libro_autor": "Norman Nise",
+    "libro_isbn": "9781118170519",
+    "libro_ejemplares": 4,
+    "libro_descripcion": "Sistemas de control automatico",
+    "editorial": 5,
+    "categoria": 8
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 23,
+  "fields": {
+    "libro_titulo": "Algoritmos",
+    "libro_autor": "Thomas Cormen",
+    "libro_isbn": "9780262033848",
+    "libro_ejemplares": 7,
+    "libro_descripcion": "Introduccion a algoritmos y estructuras",
+    "editorial": 8,
+    "categoria": 10
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 24,
+  "fields": {
+    "libro_titulo": "Ingenieria de Transporte",
+    "libro_autor": "C Jotin Khisty",
+    "libro_isbn": "9780131149120",
+    "libro_ejemplares": 4,
+    "libro_descripcion": "Planeacion y diseno de transporte",
+    "editorial": 1,
+    "categoria": 5
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 25,
+  "fields": {
+    "libro_titulo": "Sistemas Operativos",
+    "libro_autor": "Andrew Tanenbaum",
+    "libro_isbn": "9780133591620",
+    "libro_ejemplares": 6,
+    "libro_descripcion": "Conceptos modernos de sistemas operativos",
+    "editorial": 10,
+    "categoria": 10
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 26,
+  "fields": {
+    "libro_titulo": "Robotica Industrial",
+    "libro_autor": "Mikell Groover",
+    "libro_isbn": "9780073373874",
+    "libro_ejemplares": 5,
+    "libro_descripcion": "Automatizacion y robotica industrial",
+    "editorial": 2,
+    "categoria": 14
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 27,
+  "fields": {
+    "libro_titulo": "Inteligencia Artificial Moderna",
+    "libro_autor": "Peter Norvig",
+    "libro_isbn": "9780136042594",
+    "libro_ejemplares": 5,
+    "libro_descripcion": "Metodos de inteligencia artificial",
+    "editorial": 8,
+    "categoria": 15
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 28,
+  "fields": {
+    "libro_titulo": "Energia Renovable",
+    "libro_autor": "Bent Sorensen",
+    "libro_isbn": "9780123745019",
+    "libro_ejemplares": 4,
+    "libro_descripcion": "Tecnologias de energia sustentable",
+    "editorial": 6,
+    "categoria": 13
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 29,
+  "fields": {
+    "libro_titulo": "Ingenieria de Materiales",
+    "libro_autor": "William Callister",
+    "libro_isbn": "9781118324578",
+    "libro_ejemplares": 8,
+    "libro_descripcion": "Propiedades y estructura de materiales",
+    "editorial": 5,
+    "categoria": 7
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 31,
+  "fields": {
+    "libro_titulo": "El Principito",
+    "libro_autor": "Antoine de Saint-Exupéry",
+    "libro_isbn": "296578456",
+    "libro_ejemplares": 2,
+    "libro_descripcion": "El Principito",
+    "editorial": null,
+    "categoria": null
+  }
+},
+{
+  "model": "biblioteca.libro",
+  "pk": 32,
+  "fields": {
+    "libro_titulo": "Caos: La creación de una ciencia",
+    "libro_autor": "James Gleick",
+    "libro_isbn": "9788498923728",
+    "libro_ejemplares": 3,
+    "libro_descripcion": "he author describes how scientists studying the growth of complexity in nature are discovering order and pattern in chaos.",
+    "editorial": null,
+    "categoria": null
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 1,
+  "fields": {
+    "usuario": 1,
+    "libro": 2,
+    "prestamo_fecha_salida": "2026-03-11",
+    "prestamo_fecha_entrega_esperada": "2026-03-25",
+    "prestamo_fecha_devolucion_real": "2026-03-11",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 2,
+  "fields": {
+    "usuario": 1,
+    "libro": 1,
+    "prestamo_fecha_salida": "2026-03-11",
+    "prestamo_fecha_entrega_esperada": "2026-03-25",
+    "prestamo_fecha_devolucion_real": "2026-03-11",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 3,
+  "fields": {
+    "usuario": 1,
+    "libro": 2,
+    "prestamo_fecha_salida": "2026-03-11",
+    "prestamo_fecha_entrega_esperada": "2026-03-25",
+    "prestamo_fecha_devolucion_real": "2026-03-11",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 4,
+  "fields": {
+    "usuario": 1,
+    "libro": 3,
+    "prestamo_fecha_salida": "2026-03-11",
+    "prestamo_fecha_entrega_esperada": "2026-03-25",
+    "prestamo_fecha_devolucion_real": "2026-03-12",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 5,
+  "fields": {
+    "usuario": 1,
+    "libro": 4,
+    "prestamo_fecha_salida": "2026-03-11",
+    "prestamo_fecha_entrega_esperada": "2026-03-25",
+    "prestamo_fecha_devolucion_real": "2026-03-12",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 6,
+  "fields": {
+    "usuario": 1,
+    "libro": 2,
+    "prestamo_fecha_salida": "2026-03-11",
+    "prestamo_fecha_entrega_esperada": "2026-03-25",
+    "prestamo_fecha_devolucion_real": "2026-03-12",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 7,
+  "fields": {
+    "usuario": 1,
+    "libro": 2,
+    "prestamo_fecha_salida": "2026-03-12",
+    "prestamo_fecha_entrega_esperada": "2026-03-26",
+    "prestamo_fecha_devolucion_real": "2026-03-12",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 8,
+  "fields": {
+    "usuario": 1,
+    "libro": 2,
+    "prestamo_fecha_salida": "2026-03-13",
+    "prestamo_fecha_entrega_esperada": "2026-03-27",
+    "prestamo_fecha_devolucion_real": "2026-03-13",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 14,
+  "fields": {
+    "usuario": 1,
+    "libro": 6,
+    "prestamo_fecha_salida": "2026-03-13",
+    "prestamo_fecha_entrega_esperada": "2026-03-20",
+    "prestamo_fecha_devolucion_real": "2026-03-13",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 15,
+  "fields": {
+    "usuario": 1,
+    "libro": 13,
+    "prestamo_fecha_salida": "2026-03-13",
+    "prestamo_fecha_entrega_esperada": "2026-03-20",
+    "prestamo_fecha_devolucion_real": "2026-03-13",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 16,
+  "fields": {
+    "usuario": 1,
+    "libro": 10,
+    "prestamo_fecha_salida": "2026-03-13",
+    "prestamo_fecha_entrega_esperada": "2026-03-20",
+    "prestamo_fecha_devolucion_real": "2026-03-14",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 17,
+  "fields": {
+    "usuario": 1,
+    "libro": 12,
+    "prestamo_fecha_salida": "2026-03-13",
+    "prestamo_fecha_entrega_esperada": "2026-03-20",
+    "prestamo_fecha_devolucion_real": "2026-03-14",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 18,
+  "fields": {
+    "usuario": 1,
+    "libro": 15,
+    "prestamo_fecha_salida": "2026-03-13",
+    "prestamo_fecha_entrega_esperada": "2026-03-20",
+    "prestamo_fecha_devolucion_real": "2026-03-14",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 19,
+  "fields": {
+    "usuario": 1,
+    "libro": 14,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-19",
+    "prestamo_fecha_devolucion_real": "2026-03-14",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 5
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 20,
+  "fields": {
+    "usuario": 1,
+    "libro": 22,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 21,
+  "fields": {
+    "usuario": 1,
+    "libro": 25,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": "2026-03-14",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 22,
+  "fields": {
+    "usuario": 4,
+    "libro": 14,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 23,
+  "fields": {
+    "usuario": 4,
+    "libro": 17,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 24,
+  "fields": {
+    "usuario": 4,
+    "libro": 27,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-17",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 3
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 25,
+  "fields": {
+    "usuario": 5,
+    "libro": 9,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": "2026-03-14",
+    "prestamo_estatus": "Devuelto",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 26,
+  "fields": {
+    "usuario": 5,
+    "libro": 29,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 27,
+  "fields": {
+    "usuario": 5,
+    "libro": 14,
+    "prestamo_fecha_salida": "2026-03-14",
+    "prestamo_fecha_entrega_esperada": "2026-03-17",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 3
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 28,
+  "fields": {
+    "usuario": 3,
+    "libro": 23,
+    "prestamo_fecha_salida": "2026-03-16",
+    "prestamo_fecha_entrega_esperada": "2026-03-23",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 7
+  }
+},
+{
+  "model": "biblioteca.prestamo",
+  "pk": 29,
+  "fields": {
+    "usuario": 5,
+    "libro": 8,
+    "prestamo_fecha_salida": "2026-03-16",
+    "prestamo_fecha_entrega_esperada": "2026-03-21",
+    "prestamo_fecha_devolucion_real": null,
+    "prestamo_estatus": "Activo",
+    "prestamo_dias_plazo": 5
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 1,
+  "fields": {
+    "usuario": 1,
+    "libro": 1,
+    "apartado_fecha": "2026-03-11",
+    "apartado_fecha_expiracion": "2026-03-14",
+    "apartado_fecha_asignacion": null,
+    "apartado_fecha_limite_recogida": null,
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 2,
+  "fields": {
+    "usuario": 1,
+    "libro": 3,
+    "apartado_fecha": "2026-03-11",
+    "apartado_fecha_expiracion": "2026-03-16",
+    "apartado_fecha_asignacion": null,
+    "apartado_fecha_limite_recogida": null,
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 3,
+  "fields": {
+    "usuario": 1,
+    "libro": 3,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": null,
+    "apartado_fecha_limite_recogida": null,
+    "apartado_estatus": "Activo"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 4,
+  "fields": {
+    "usuario": 1,
+    "libro": 1,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-18",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 5,
+  "fields": {
+    "usuario": 1,
+    "libro": 4,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-18",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 6,
+  "fields": {
+    "usuario": 1,
+    "libro": 5,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-18",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 7,
+  "fields": {
+    "usuario": 1,
+    "libro": 8,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-18",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 8,
+  "fields": {
+    "usuario": 1,
+    "libro": 7,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-18",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 9,
+  "fields": {
+    "usuario": 1,
+    "libro": 3,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 10,
+  "fields": {
+    "usuario": 1,
+    "libro": 11,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 11,
+  "fields": {
+    "usuario": 1,
+    "libro": 16,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 12,
+  "fields": {
+    "usuario": 1,
+    "libro": 20,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 13,
+  "fields": {
+    "usuario": 1,
+    "libro": 19,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 14,
+  "fields": {
+    "usuario": 1,
+    "libro": 28,
+    "apartado_fecha": "2026-03-13",
+    "apartado_fecha_expiracion": "2026-03-20",
+    "apartado_fecha_asignacion": "2026-03-13",
+    "apartado_fecha_limite_recogida": "2026-03-16",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 15,
+  "fields": {
+    "usuario": 1,
+    "libro": 18,
+    "apartado_fecha": "2026-03-14",
+    "apartado_fecha_expiracion": "2026-03-19",
+    "apartado_fecha_asignacion": "2026-03-14",
+    "apartado_fecha_limite_recogida": "2026-03-17",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 16,
+  "fields": {
+    "usuario": 1,
+    "libro": 21,
+    "apartado_fecha": "2026-03-14",
+    "apartado_fecha_expiracion": "2026-03-19",
+    "apartado_fecha_asignacion": "2026-03-14",
+    "apartado_fecha_limite_recogida": "2026-03-17",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 17,
+  "fields": {
+    "usuario": 1,
+    "libro": 26,
+    "apartado_fecha": "2026-03-14",
+    "apartado_fecha_expiracion": "2026-03-19",
+    "apartado_fecha_asignacion": "2026-03-14",
+    "apartado_fecha_limite_recogida": "2026-03-17",
+    "apartado_estatus": "Cancelado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 18,
+  "fields": {
+    "usuario": 4,
+    "libro": 14,
+    "apartado_fecha": "2026-03-14",
+    "apartado_fecha_expiracion": "2026-03-19",
+    "apartado_fecha_asignacion": "2026-03-14",
+    "apartado_fecha_limite_recogida": "2026-03-17",
+    "apartado_estatus": "Convertido"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 19,
+  "fields": {
+    "usuario": 4,
+    "libro": 25,
+    "apartado_fecha": "2026-03-14",
+    "apartado_fecha_expiracion": "2026-03-19",
+    "apartado_fecha_asignacion": "2026-03-14",
+    "apartado_fecha_limite_recogida": "2026-03-17",
+    "apartado_estatus": "Asignado"
+  }
+},
+{
+  "model": "biblioteca.apartado",
+  "pk": 20,
+  "fields": {
+    "usuario": 5,
+    "libro": 22,
+    "apartado_fecha": "2026-03-16",
+    "apartado_fecha_expiracion": "2026-03-21",
+    "apartado_fecha_asignacion": "2026-03-16",
+    "apartado_fecha_limite_recogida": "2026-03-19",
+    "apartado_estatus": "Asignado"
+  }
+}
+]
