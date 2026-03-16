@@ -11,6 +11,79 @@ interface ModalApartado {
   tipo: 'apartar' | 'prestar'
 }
 
+// ── Paleta de colores para portadas generadas ──
+const COVER_PALETTES = [
+  { bg: ['#1e3a5f', '#2d6a9f'], text: '#e8f4fd' },
+  { bg: ['#2d1b4e', '#6b35a0'], text: '#f0e8ff' },
+  { bg: ['#1a3a2a', '#2d7a50'], text: '#e8f5ee' },
+  { bg: ['#3a1a1a', '#9a3030'], text: '#fde8e8' },
+  { bg: ['#1a2a3a', '#2d5a8a'], text: '#e8f0fd' },
+  { bg: ['#2a2a1a', '#7a7020'], text: '#fdfae8' },
+  { bg: ['#1a3a3a', '#207a7a'], text: '#e8fdfd' },
+  { bg: ['#3a2a1a', '#9a6020'], text: '#fdf0e8' },
+]
+
+const getPalette = (titulo: string) => {
+  const sum = titulo.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
+  return COVER_PALETTES[sum % COVER_PALETTES.length]
+}
+
+const abreviar = (txt: string, max: number) =>
+  txt.length > max ? txt.slice(0, max).trim() + '…' : txt
+
+// ── Componente de portada ──
+function BookCover({ libro, size = 'md' }: { libro: Libro; size?: 'sm' | 'md' | 'lg' }) {
+  const [imgOk, setImgOk] = useState<boolean | null>(null)
+  const palette = getPalette(libro.libro_titulo)
+
+  const coverUrl = libro.libro_isbn
+    ? `https://covers.openlibrary.org/b/isbn/${libro.libro_isbn.replace(/-/g, '')}-M.jpg`
+    : null
+
+  const heights: Record<string, number> = { sm: 120, md: 180, lg: 240 }
+  const h = heights[size]
+
+  return (
+    <div className={`book-cover book-cover-${size}`} style={{ height: h }}>
+      {coverUrl && imgOk !== false && (
+        <img
+          src={coverUrl}
+          alt={libro.libro_titulo}
+          className={`book-cover-img${imgOk ? ' loaded' : ''}`}
+          onLoad={() => setImgOk(true)}
+          onError={() => setImgOk(false)}
+        />
+      )}
+
+      {(imgOk === false || !coverUrl) && (
+        <div
+          className="book-cover-generated"
+          style={{
+            background: `linear-gradient(145deg, ${palette.bg[0]}, ${palette.bg[1]})`,
+            color: palette.text,
+          }}
+        >
+          <div className="bcg-spine" style={{ background: palette.bg[0] }} />
+          <div className="bcg-content">
+            <div className="bcg-deco">
+              <div className="bcg-circle" style={{ borderColor: palette.text + '30' }} />
+              <div className="bcg-line" style={{ background: palette.text + '40' }} />
+              <div className="bcg-line short" style={{ background: palette.text + '30' }} />
+            </div>
+            <p className="bcg-titulo">{abreviar(libro.libro_titulo, size === 'lg' ? 60 : 40)}</p>
+            <p className="bcg-autor">{abreviar(libro.libro_autor, 30)}</p>
+          </div>
+          <div className="bcg-bottom-bar" style={{ background: palette.bg[0] + 'aa' }} />
+        </div>
+      )}
+
+      {coverUrl && imgOk === null && (
+        <div className="book-cover-shimmer" />
+      )}
+    </div>
+  )
+}
+
 export default function Libros() {
   const navigate       = useNavigate()
   const [searchParams] = useSearchParams()
@@ -88,9 +161,8 @@ export default function Libros() {
     setModal({ libro, tipo })
   }
 
-  // ── Paginado ──
-  const totalPaginas  = Math.ceil(libros.length / POR_PAGINA)
-  const librosPagina  = libros.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA)
+  const totalPaginas = Math.ceil(libros.length / POR_PAGINA)
+  const librosPagina = libros.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA)
 
   const irPagina = (p: number) => {
     setPagina(p)
@@ -98,7 +170,7 @@ export default function Libros() {
   }
 
   return (
-    <div className="libros-page">
+    <div className="libros-page" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
       {/* ── Hero ── */}
       <div className="libros-hero">
@@ -169,7 +241,7 @@ export default function Libros() {
       </div>
 
       {/* ── Contenido ── */}
-      <div className="libros-content">
+      <div className="libros-content" style={{ flex: 1 }}>
         {error && (
           <div className="libros-error-state">
             <span>⚠️</span><p>{error}</p>
@@ -195,11 +267,15 @@ export default function Libros() {
             <div className="libros-grid">
               {librosPagina.map(libro => (
                 <div key={libro.libro_id} className="libro-card">
-                  <div className="libro-card-top">
+
+                  {/* ── Portada ── */}
+                  <div className="libro-cover-wrap">
+                    <BookCover libro={libro} size="md" />
                     <span className={`libro-badge ${libro.libro_ejemplares > 0 ? "disponible" : "agotado"}`}>
                       {libro.libro_ejemplares > 0 ? `${libro.libro_ejemplares} disponibles` : "Agotado"}
                     </span>
                   </div>
+
                   <div className="libro-body">
                     <span className="libro-categoria">{libro.categoria_nombre}</span>
                     <p className="libro-titulo">{libro.libro_titulo}</p>
@@ -209,6 +285,7 @@ export default function Libros() {
                     )}
                     <p className="libro-isbn">ISBN: {libro.libro_isbn}</p>
                   </div>
+
                   <div className="libro-acciones">
                     {libro.libro_ejemplares > 0 ? (
                       <>
@@ -229,17 +306,11 @@ export default function Libros() {
               ))}
             </div>
 
-            {/* ── Paginador ── */}
             {totalPaginas > 1 && (
               <div className="libros-paginador">
-                <button
-                  className="pag-btn"
-                  onClick={() => irPagina(pagina - 1)}
-                  disabled={pagina === 1}
-                >
+                <button className="pag-btn" onClick={() => irPagina(pagina - 1)} disabled={pagina === 1}>
                   ← Anterior
                 </button>
-
                 <div className="pag-nums">
                   {Array.from({ length: totalPaginas }, (_, i) => i + 1)
                     .filter(p => p === 1 || p === totalPaginas || Math.abs(p - pagina) <= 1)
@@ -255,18 +326,11 @@ export default function Libros() {
                             key={p}
                             className={`pag-num ${pagina === p ? 'activo' : ''}`}
                             onClick={() => irPagina(p as number)}
-                          >
-                            {p}
-                          </button>
+                          >{p}</button>
                     )
                   }
                 </div>
-
-                <button
-                  className="pag-btn"
-                  onClick={() => irPagina(pagina + 1)}
-                  disabled={pagina === totalPaginas}
-                >
+                <button className="pag-btn" onClick={() => irPagina(pagina + 1)} disabled={pagina === totalPaginas}>
                   Siguiente →
                 </button>
               </div>
@@ -281,9 +345,11 @@ export default function Libros() {
           <div className="libros-modal" onClick={e => e.stopPropagation()}>
             <button className="libros-modal-x" onClick={() => setModal(null)}>✕</button>
 
-            <div className="libros-modal-ico">
-              {modal.tipo === 'prestar' ? '📖' : '🔖'}
+            {/* Portada en el modal */}
+            <div className="libros-modal-cover">
+              <BookCover libro={modal.libro} size="lg" />
             </div>
+
             <p className="libros-modal-pre">
               {modal.tipo === 'prestar' ? 'Solicitar préstamo' : 'Apartar libro'}
             </p>

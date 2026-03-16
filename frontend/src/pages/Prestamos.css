@@ -309,7 +309,7 @@
   .prest-modal     { padding: 32px 20px; }
 }
 
-/* Paginador — agregar en Libros.css (y reutilizar en Prestamos/Apartados) */
+
 .libros-paginador {
   display: flex;
   align-items: center;

@@ -117,7 +117,7 @@ export default function Apartados() {
   );
 
   return (
-    // ← flex column + min-height para que el footer siempre quede abajo
+    
     <div className="apart-page" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
       {/* Hero */}

@@ -214,7 +214,7 @@ class ApartadoCreateSerializer(serializers.ModelSerializer):
         ]
 
 
-# ✅ NUEVO: serializer específico para actualizar el estatus de un apartado (PATCH cancelar)
+
 class ApartadoUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Apartado

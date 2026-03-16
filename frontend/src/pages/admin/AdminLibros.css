@@ -26,6 +26,7 @@
   border: none; padding: 10px 20px; border-radius: 8px;
   font-size: 14px; font-weight: 600; cursor: pointer;
   font-family: sans-serif; transition: background 0.2s;
+  white-space: nowrap;
 }
 .alib-btn-nuevo:hover { background: #2d3a9e; }
 
@@ -42,6 +43,8 @@
   display: flex; gap: 4px;
   border-bottom: 1px solid var(--admin-border);
   margin-bottom: 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .alib-tab {
@@ -49,18 +52,19 @@
   color: var(--admin-muted); font-size: 14px; font-family: sans-serif;
   cursor: pointer; border-bottom: 2px solid transparent;
   transition: color 0.2s, border-color 0.2s;
-  margin-bottom: -1px;
+  margin-bottom: -1px; white-space: nowrap;
 }
 .alib-tab:hover { color: var(--admin-text); }
 .alib-tab.active { color: #fff; border-bottom-color: var(--admin-accent); }
 
 /* Filtros */
 .alib-filtros {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; flex-wrap: wrap;
 }
 
 .alib-search {
-  flex: 1; max-width: 400px;
+  flex: 1; max-width: 400px; min-width: 180px;
   padding: 10px 14px;
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
@@ -71,18 +75,20 @@
 .alib-search:focus { border-color: var(--admin-accent); }
 .alib-search::placeholder { color: var(--admin-muted); }
 
-.alib-count { font-size: 13px; color: var(--admin-muted); font-family: sans-serif; }
+.alib-count { font-size: 13px; color: var(--admin-muted); font-family: sans-serif; white-space: nowrap; }
 
 /* Tabla */
 .alib-tabla-wrap {
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
   border-radius: 12px; overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .alib-tabla {
   width: 100%; border-collapse: collapse;
   font-family: sans-serif; font-size: 13px;
+  min-width: 600px;
 }
 
 .alib-tabla thead tr {
@@ -109,52 +115,25 @@
 .td-bold  { font-weight: 600; }
 .td-muted { color: var(--admin-muted); font-size: 12px; }
 
-/* ── Semáforo de ejemplares ── */
+/* Semáforo de ejemplares */
 .alib-ej {
-  font-weight: 700;
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  display: inline-block;
-  white-space: nowrap;
+  font-weight: 700; font-size: 12px;
+  padding: 3px 10px; border-radius: 20px;
+  display: inline-block; white-space: nowrap;
 }
+.alib-ej.cero  { color: #ef4444; background: rgba(239,68,68,0.12);  border: 1px solid rgba(239,68,68,0.25); }
+.alib-ej.bajo  { color: #f97316; background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.25); }
+.alib-ej.medio { color: #eab308; background: rgba(234,179,8,0.12);  border: 1px solid rgba(234,179,8,0.25); }
+.alib-ej.alto  { color: #10b981; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); }
 
-/* 0 ejemplares → rojo (agotado) */
-.alib-ej.cero {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
-
-/* 1-2 ejemplares → naranja (crítico) */
-.alib-ej.bajo {
-  color: #f97316;
-  background: rgba(249, 115, 22, 0.12);
-  border: 1px solid rgba(249, 115, 22, 0.25);
-}
-
-/* 3-5 ejemplares → amarillo (limitado) */
-.alib-ej.medio {
-  color: #eab308;
-  background: rgba(234, 179, 8, 0.12);
-  border: 1px solid rgba(234, 179, 8, 0.25);
-}
-
-/* 6+ ejemplares → verde (disponible) */
-.alib-ej.alto {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-
-.alib-acciones { display: flex; gap: 8px; }
+.alib-acciones { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .alib-btn-edit {
   padding: 5px 12px; border-radius: 6px;
   border: 1px solid var(--admin-border);
   background: none; color: var(--admin-text);
   font-size: 12px; cursor: pointer; font-family: sans-serif;
-  transition: background 0.15s;
+  transition: background 0.15s; white-space: nowrap;
 }
 .alib-btn-edit:hover { background: var(--admin-border); }
 
@@ -163,16 +142,17 @@
   border: 1px solid rgba(239,68,68,0.3);
   background: none; color: #ef4444;
   font-size: 12px; cursor: pointer; font-family: sans-serif;
-  transition: background 0.15s;
+  transition: background 0.15s; white-space: nowrap;
 }
 .alib-btn-del:hover { background: rgba(239,68,68,0.1); }
 
 /* Lista categorías / editoriales */
-.alib-lista-wrap { max-width: 600px; }
+.alib-lista-wrap { max-width: 600px; width: 100%; }
 
 .alib-nuevo-inline {
-  display: flex; gap: 10px; margin-bottom: 20px;
+  display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
 }
+.alib-nuevo-inline .alib-search { max-width: 100%; flex: 1; min-width: 160px; }
 
 .alib-lista {
   background: var(--admin-card-bg);
@@ -184,16 +164,16 @@
   display: flex; align-items: center; gap: 10px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--admin-border);
-  font-family: sans-serif;
+  font-family: sans-serif; flex-wrap: wrap;
 }
 .alib-lista-item:last-child { border-bottom: none; }
 
 .alib-lista-nombre {
-  flex: 1; font-size: 14px; color: var(--admin-text);
+  flex: 1; font-size: 14px; color: var(--admin-text); min-width: 100px;
 }
 
 .alib-edit-input {
-  flex: 1; padding: 7px 10px;
+  flex: 1; padding: 7px 10px; min-width: 120px;
   background: var(--admin-bg);
   border: 1px solid var(--admin-accent);
   border-radius: 6px; color: var(--admin-text);
@@ -204,7 +184,7 @@
   padding: 6px 14px; border-radius: 6px;
   background: var(--admin-accent); color: #fff;
   border: none; font-size: 12px; cursor: pointer;
-  font-family: sans-serif;
+  font-family: sans-serif; white-space: nowrap;
 }
 
 .alib-btn-cancel-sm {
@@ -239,13 +219,13 @@
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.7);
   display: flex; align-items: center; justify-content: center;
-  z-index: 200; padding: 20px;
+  z-index: 200; padding: 16px;
 }
 
 .alib-modal {
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
-  border-radius: 16px; padding: 32px;
+  border-radius: 16px; padding: 28px;
   width: 100%; max-width: 600px;
   position: relative; max-height: 90vh; overflow-y: auto;
 }
@@ -323,7 +303,6 @@
 .alib-btn-cancelar:hover { background: var(--admin-border); color: var(--admin-text); }
 
 .alib-del-ico { font-size: 40px; margin-bottom: 12px; }
-
 .alib-del-txt {
   font-size: 14px; color: var(--admin-muted);
   font-family: sans-serif; line-height: 1.6; margin-bottom: 24px;
@@ -342,24 +321,22 @@
 /* ── Paginación ── */
 .alib-pagination {
   display: flex; align-items: center; justify-content: center;
-  gap: 8px; padding: 16px 14px;
+  gap: 6px; padding: 14px 10px;
   border-top: 1px solid var(--admin-border);
-  font-family: sans-serif;
+  font-family: sans-serif; flex-wrap: wrap;
 }
 
 .alib-pg-btn {
-  padding: 7px 14px; border-radius: 7px;
+  padding: 7px 12px; border-radius: 7px;
   border: 1px solid var(--admin-border);
   background: none; color: var(--admin-muted);
   font-size: 13px; cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s; white-space: nowrap;
 }
-.alib-pg-btn:hover:not(:disabled) {
-  background: var(--admin-border); color: var(--admin-text);
-}
+.alib-pg-btn:hover:not(:disabled) { background: var(--admin-border); color: var(--admin-text); }
 .alib-pg-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-.alib-pg-nums { display: flex; gap: 4px; align-items: center; }
+.alib-pg-nums { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: center; }
 
 .alib-pg-num {
   width: 34px; height: 34px; border-radius: 7px;
@@ -376,4 +353,41 @@
 
 .alib-pg-ellipsis {
   color: var(--admin-muted); font-size: 13px; padding: 0 4px;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .alib-page { padding: 28px 24px; }
+}
+
+@media (max-width: 767px) {
+  .alib-page { padding: 20px 16px; }
+  .alib-title { font-size: 22px; }
+
+  /* Header apilado */
+  .alib-header { flex-direction: column; align-items: flex-start; }
+  .alib-btn-nuevo { width: 100%; text-align: center; }
+
+  /* Filtros apilados */
+  .alib-filtros { flex-direction: column; align-items: stretch; }
+  .alib-search  { max-width: 100%; min-width: unset; }
+
+  /* Form modal: 1 columna en móvil */
+  .alib-form-grid { grid-template-columns: 1fr; }
+  .alib-span2 { grid-column: span 1; }
+
+  /* Modal btns apilados */
+  .alib-modal-btns { flex-direction: column; }
+  .alib-btn-cancelar { width: 100%; text-align: center; }
+
+  /* Paginación compacta */
+  .alib-pg-btn { padding: 6px 10px; font-size: 12px; }
+  .alib-pg-num { width: 30px; height: 30px; font-size: 12px; }
+
+  /* Lista inline: botones apilados */
+  .alib-nuevo-inline { flex-direction: column; }
+  .alib-nuevo-inline .alib-btn-nuevo { width: 100%; text-align: center; }
 }

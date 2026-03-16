@@ -31,6 +31,7 @@
   border: none; padding: 10px 20px;
   border-radius: 8px; font-size: 14px; font-weight: 600;
   cursor: pointer; font-family: sans-serif; transition: background 0.2s;
+  white-space: nowrap;
 }
 .aprest-btn-nuevo:hover { background: #2d3a9e; }
 
@@ -49,7 +50,7 @@
 }
 
 .aprest-search {
-  flex: 1; min-width: 220px; max-width: 400px;
+  flex: 1; min-width: 200px; max-width: 400px;
   padding: 10px 14px;
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
@@ -77,6 +78,7 @@
   border-radius: 8px; color: var(--admin-text);
   font-size: 14px; font-family: sans-serif;
   cursor: pointer; transition: background 0.2s;
+  white-space: nowrap;
 }
 .aprest-btn-buscar:hover { background: var(--admin-border); }
 
@@ -85,11 +87,13 @@
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
   border-radius: 12px; overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .aprest-tabla {
   width: 100%; border-collapse: collapse;
   font-family: sans-serif; font-size: 13px;
+  min-width: 580px;
 }
 
 .aprest-tabla thead tr {
@@ -120,7 +124,7 @@
 .aprest-pill {
   display: inline-flex; align-items: center;
   padding: 3px 10px; border-radius: 20px;
-  font-size: 12px; font-weight: 600;
+  font-size: 12px; font-weight: 600; white-space: nowrap;
 }
 .aprest-pill.activo   { background: rgba(16,185,129,0.15); color: #10b981; }
 .aprest-pill.devuelto { background: rgba(99,102,241,0.15);  color: #818cf8; }
@@ -137,30 +141,29 @@
   background: none; color: #10b981;
   font-size: 12px; cursor: pointer;
   font-family: sans-serif; transition: background 0.15s;
+  white-space: nowrap;
 }
 .aprest-btn-devolver:hover { background: rgba(16,185,129,0.1); }
 
 /* ── Paginación ── */
 .aprest-pagination {
   display: flex; align-items: center; justify-content: center;
-  gap: 8px; padding: 16px 14px;
+  gap: 6px; padding: 14px 10px;
   border-top: 1px solid var(--admin-border);
-  font-family: sans-serif;
+  font-family: sans-serif; flex-wrap: wrap;
 }
 
 .aprest-pg-btn {
-  padding: 7px 14px; border-radius: 7px;
+  padding: 7px 12px; border-radius: 7px;
   border: 1px solid var(--admin-border);
   background: none; color: var(--admin-muted);
   font-size: 13px; cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s; white-space: nowrap;
 }
-.aprest-pg-btn:hover:not(:disabled) {
-  background: var(--admin-border); color: var(--admin-text);
-}
+.aprest-pg-btn:hover:not(:disabled) { background: var(--admin-border); color: var(--admin-text); }
 .aprest-pg-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-.aprest-pg-nums { display: flex; gap: 4px; align-items: center; }
+.aprest-pg-nums { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: center; }
 
 .aprest-pg-num {
   width: 34px; height: 34px; border-radius: 7px;
@@ -205,15 +208,15 @@
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.7);
   display: flex; align-items: center; justify-content: center;
-  z-index: 200; padding: 20px;
+  z-index: 200; padding: 16px;
 }
 
 .aprest-modal {
   background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
-  border-radius: 16px; padding: 32px;
+  border-radius: 16px; padding: 28px;
   width: 100%; max-width: 480px;
-  position: relative;
+  position: relative; max-height: 90vh; overflow-y: auto;
 }
 
 .aprest-modal-sm { max-width: 400px; }
@@ -266,10 +269,8 @@
 .aprest-form-group select:focus { border-color: var(--admin-accent); }
 .aprest-form-group select option { background: var(--admin-card-bg); }
 
-/* ── Buscador de libro con dropdown ── */
-.aprest-libro-search-wrap {
-  position: relative;
-}
+/* Buscador libro con dropdown */
+.aprest-libro-search-wrap { position: relative; }
 
 .aprest-libro-search-wrap input {
   width: 100%; padding: 10px 36px 10px 12px;
@@ -307,13 +308,8 @@
 .aprest-libro-option:last-child { border-bottom: none; }
 .aprest-libro-option:hover { background: rgba(255,255,255,0.05); }
 
-.aplo-titulo {
-  font-size: 13px; font-weight: 600;
-  color: var(--admin-text); font-family: sans-serif;
-}
-.aplo-autor {
-  font-size: 12px; color: var(--admin-muted); font-family: sans-serif;
-}
+.aplo-titulo { font-size: 13px; font-weight: 600; color: var(--admin-text); font-family: sans-serif; }
+.aplo-autor  { font-size: 12px; color: var(--admin-muted); font-family: sans-serif; }
 
 .aprest-libro-empty {
   padding: 14px; font-size: 13px;
@@ -338,11 +334,11 @@
 }
 
 .aprest-dev-row {
-  display: flex; justify-content: space-between; align-items: center;
-  font-family: sans-serif; font-size: 13px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  font-family: sans-serif; font-size: 13px; gap: 8px;
 }
-.aprest-dev-row span { color: var(--admin-muted); }
-.aprest-dev-row strong { color: var(--admin-text); }
+.aprest-dev-row span   { color: var(--admin-muted); flex-shrink: 0; }
+.aprest-dev-row strong { color: var(--admin-text); text-align: right; word-break: break-word; }
 
 .aprest-dev-alerta {
   background: rgba(239,68,68,0.1);
@@ -372,3 +368,34 @@
   font-family: sans-serif; transition: background 0.2s;
 }
 .aprest-btn-cancelar:hover { background: var(--admin-border); color: var(--admin-text); }
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .aprest-page { padding: 28px 24px; }
+}
+
+@media (max-width: 767px) {
+  .aprest-page { padding: 20px 16px; }
+  .aprest-title { font-size: 22px; }
+
+  /* Header apilado */
+  .aprest-header { flex-direction: column; align-items: flex-start; }
+  .aprest-btn-nuevo { width: 100%; text-align: center; }
+
+  /* Filtros apilados */
+  .aprest-filtros { flex-direction: column; align-items: stretch; }
+  .aprest-search  { max-width: 100%; min-width: unset; }
+  .aprest-select  { width: 100%; }
+  .aprest-btn-buscar { width: 100%; }
+
+  /* Modal btns apilados */
+  .aprest-modal-btns { flex-direction: column; }
+  .aprest-btn-cancelar { width: 100%; text-align: center; }
+
+  /* Paginación compacta */
+  .aprest-pg-btn { padding: 6px 10px; font-size: 12px; }
+  .aprest-pg-num { width: 30px; height: 30px; font-size: 12px; }
+}

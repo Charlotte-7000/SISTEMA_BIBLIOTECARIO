@@ -8,7 +8,15 @@ interface FormRegistro {
   usuario_aMaterno: string;
   matricula_id: string;
   usuario_password: string;
+  rol?: "alumno" | "maestro";
 }
+
+// Detecta el tipo de ID según su formato
+const detectarTipo = (valor: string): "alumno" | "maestro" | null => {
+  if (/^\d{1,3}$/.test(valor) && valor.length <= 3) return "maestro"; // hasta 3 dígitos → trabajador
+  if (/^\d{4}[A-Z]{1,}[A-Z0-9]*\d+$/.test(valor)) return "alumno";   // formato 2024TIDSM020
+  return null;
+};
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -29,26 +37,47 @@ export default function Registro() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Validar formato del ID antes de enviar
+    const tipo = detectarTipo(form.matricula_id);
+    if (!tipo) {
+      setError(
+        "El ID no tiene un formato válido. Matrícula: ej. 2024TIDSM020 | Núm. Trabajador: ej. 620"
+      );
+      return;
+    }
+
     setCargando(true);
     setError("");
     try {
       const response = await fetch("http://localhost:8000/api/registro/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, rol: tipo }), // envía "alumno" o "maestro"
       });
       if (response.ok) {
         navigate("/login");
       } else {
         const data = await response.json();
         const primerError = Object.values(data)[0];
-        setError(Array.isArray(primerError) ? primerError[0] as string : "Error al registrar.");
+        setError(Array.isArray(primerError) ? (primerError[0] as string) : "Error al registrar.");
       }
     } catch {
       setError("No se pudo conectar con el servidor.");
     } finally {
       setCargando(false);
     }
+  };
+
+  // Hint dinámico según lo que escribe el usuario
+  const renderHintID = () => {
+    if (!form.matricula_id) return null;
+    const tipo = detectarTipo(form.matricula_id);
+    if (tipo === "alumno")
+      return <span className="id-hint id-hint--alumno">✓ Matrícula de alumno </span>;
+    if (tipo === "maestro")
+      return <span className="id-hint id-hint--maestro"> Núm. de trabajador </span>;
+    return <span className="id-hint id-hint--invalido">Formato no reconocido</span>;
   };
 
   return (
@@ -127,17 +156,28 @@ export default function Registro() {
                   onChange={handleChange}
                 />
               </div>
+
+              {/* ── Campo ID con detección automática ── */}
               <div className="form-group">
-                <label className="form-label">ID Institucional</label>
+                <label className="form-label">Matrícula / Núm. Trabajador</label>
                 <input
-                  className="form-input"
+                  className={`form-input ${
+                    form.matricula_id
+                      ? detectarTipo(form.matricula_id) === "alumno"
+                        ? "form-input--alumno"
+                        : detectarTipo(form.matricula_id) === "maestro"
+                        ? "form-input--maestro"
+                        : "form-input--invalido"
+                      : ""
+                  }`}
                   type="text"
                   name="matricula_id"
-                  placeholder="Ej. 202312345"
+                  placeholder="Ej. 2024TIDSM020 o 620"
                   value={form.matricula_id}
                   onChange={handleChange}
                   required
                 />
+                {renderHintID()}
               </div>
             </div>
 

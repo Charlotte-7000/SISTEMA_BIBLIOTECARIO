@@ -123,7 +123,7 @@
 
 /* ── Contenido ── */
 .libros-content {
-  max-width: 1280px; margin: 0 auto;
+  width: 100%;
   padding: 32px 48px 60px;
 }
 
@@ -162,8 +162,9 @@
 /* ── Grid ── */
 .libros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  align-items: start;
 }
 
 /* ── Card ── */
@@ -171,27 +172,155 @@
   background: #fff;
   border: 1.5px solid #e2e8f2;
   border-radius: 18px;
-  padding: 20px;
-  display: flex; flex-direction: column; gap: 12px;
+  overflow: hidden;           /* ← clave para que la portada no salga de la card */
+  display: flex;
+  flex-direction: column;
+  gap: 0;                     /* ← gap 0, el spacing lo maneja libro-body */
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 .libro-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(11,15,26,0.10);
-  border-color: transparent;
+  border-color: #c7d4f0;
 }
 
-.libro-card-top { display: flex; }
+/* Ocultar el card-top original — la badge ya va en libro-cover-wrap */
+.libro-card-top { display: none; }
 
-.libro-badge {
-  display: inline-flex; align-items: center;
-  padding: 4px 12px; border-radius: 999px;
-  font-size: 11px; font-weight: 700;
+/* ── Portada dentro de la card ── */
+.libro-cover-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
 }
-.libro-badge.disponible { background: #d1fae5; color: #065f46; }
-.libro-badge.agotado    { background: #fee2e2; color: #991b1b; }
 
-.libro-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.libro-cover-wrap .libro-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+/* ── Componente book-cover ── */
+.book-cover {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #1a1a2e;
+  display: block;
+}
+
+.book-cover-sm  { height: 120px; }
+.book-cover-md  { height: 190px; }
+.book-cover-lg  { height: 240px; }
+
+/* Imagen real */
+.book-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.book-cover-img.loaded { opacity: 1; }
+
+/* Portada generada */
+.book-cover-generated {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  font-family: Georgia, serif;
+}
+
+.bcg-spine {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 10px;
+  opacity: 0.7;
+}
+
+.bcg-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px 14px 10px 20px;
+  gap: 6px;
+}
+
+.bcg-deco {
+  position: absolute;
+  top: 12px; right: 12px;
+  display: flex; flex-direction: column;
+  gap: 4px; align-items: flex-end;
+}
+
+.bcg-circle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  margin-bottom: 4px;
+}
+
+.bcg-line { height: 1.5px; width: 40px; border-radius: 2px; }
+.bcg-line.short { width: 26px; }
+
+.bcg-titulo {
+  font-size: 12px; font-weight: 700;
+  line-height: 1.3; margin: 0;
+  letter-spacing: 0.2px;
+}
+.book-cover-lg .bcg-titulo { font-size: 15px; }
+.book-cover-sm .bcg-titulo { font-size: 10px; }
+
+.bcg-autor {
+  font-size: 10px; opacity: 0.75;
+  margin: 0; font-style: italic;
+  letter-spacing: 0.3px;
+}
+.book-cover-lg .bcg-autor { font-size: 12px; }
+
+.bcg-bottom-bar {
+  height: 6px; width: 100%; flex-shrink: 0;
+}
+
+/* Shimmer */
+.book-cover-shimmer {
+  width: 100%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(200,210,230,0.4) 25%,
+    rgba(220,228,240,0.8) 50%,
+    rgba(200,210,230,0.4) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Portada en el modal ── */
+.libros-modal-cover {
+  width: 130px;
+  margin: 0 auto 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+/* ── Cuerpo de la card (debajo de la portada) ── */
+.libro-body {
+  flex: 1;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 16px 18px 8px;   /* ← padding aquí, no en la card */
+}
 
 .libro-categoria {
   font-size: 9.5px; font-weight: 700; color: #0057ff;
@@ -207,12 +336,26 @@
 .libro-desc {
   font-size: 12px; color: #94a3b8; line-height: 1.55;
   margin-top: 6px;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
 }
 .libro-isbn { font-size: 11px; color: #c8d2e4; margin-top: 4px; }
 
+/* ── Badge ── */
+.libro-badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+}
+.libro-badge.disponible { background: #d1fae5; color: #065f46; }
+.libro-badge.agotado    { background: #fee2e2; color: #991b1b; }
+
 /* ── Acciones ── */
-.libro-acciones { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+.libro-acciones {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 0 18px 18px;     /* ← padding aquí también */
+  margin-top: auto;
+}
 
 .btn-prestar {
   width: 100%; padding: 10px;
@@ -244,6 +387,28 @@
 }
 .btn-apartar-agotado:hover { background: #eff4ff; border-color: #0057ff; color: #0057ff; }
 
+/* ── Selector días ── */
+.libros-dias-selector { margin-bottom: 18px; text-align: left; }
+.libros-dias-label {
+  display: block; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: #94a3b8; margin-bottom: 10px;
+}
+.libros-dias-opciones { display: flex; gap: 8px; }
+.libros-dia-btn {
+  flex: 1; padding: 10px;
+  border: 1.5px solid #e2e8f2; border-radius: 10px;
+  background: #f8fafc; color: #64748b;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer;
+  transition: all .15s;
+}
+.libros-dia-btn:hover { border-color: #0057ff; color: #0057ff; background: #eff4ff; }
+.libros-dia-btn.activo {
+  border-color: #0057ff; background: #0057ff; color: #fff;
+  box-shadow: 0 3px 10px rgba(0,87,255,0.25);
+}
+
 /* ══ MODAL ══ */
 .libros-backdrop {
   position: fixed; inset: 0;
@@ -261,6 +426,7 @@
   position: relative; text-align: center;
   animation: slideUp .25s ease;
   box-shadow: 0 24px 80px rgba(7,9,26,0.30);
+  max-height: 90vh; overflow-y: auto;
 }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -320,99 +486,47 @@
 }
 .libros-btn-cancel:hover { border-color: #94a3b8; color: #0b0f1a; }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .libros-hero         { padding: 28px 20px; }
-  .libros-filtros-wrap { padding: 14px 20px; }
-  .libros-content      { padding: 24px 16px 40px; }
-  .libros-notif        { padding: 12px 20px; }
-  .libros-grid         { grid-template-columns: 1fr; }
-  .libros-modal        { padding: 32px 20px; }
-}
-/* ── Selector días apartado ── */
-.libros-dias-selector {
-  margin-bottom: 18px;
-  text-align: left;
-}
-
-.libros-dias-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #94a3b8;
-  margin-bottom: 10px;
-}
-
-.libros-dias-opciones {
-  display: flex;
-  gap: 8px;
-}
-
-.libros-dia-btn {
-  flex: 1;
-  padding: 10px;
-  border: 1.5px solid #e2e8f2;
-  border-radius: 10px;
-  background: #f8fafc;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'Sora', sans-serif;
-  cursor: pointer;
-  transition: all .15s;
-}
-
-.libros-dia-btn:hover {
-  border-color: #0057ff;
-  color: #0057ff;
-  background: #eff4ff;
-}
-
-.libros-dia-btn.activo {
-  border-color: #0057ff;
-  background: #0057ff;
-  color: #fff;
-  box-shadow: 0 3px 10px rgba(0,87,255,0.25);
-}
-/* Paginador — agregar en Libros.css (y reutilizar en Prestamos/Apartados) */
+/* ── Paginador ── */
 .libros-paginador {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 32px 0 16px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; margin: 32px 0 16px;
 }
 .pag-btn {
-  padding: 8px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: white;
-  color: #475569;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all .15s;
+  padding: 8px 16px; border: 1px solid #e2e8f0;
+  border-radius: 8px; background: white; color: #475569;
+  font-size: 14px; cursor: pointer; transition: all .15s;
 }
 .pag-btn:hover:not(:disabled) { background: #f1f5f9; }
 .pag-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .pag-nums { display: flex; gap: 4px; }
 .pag-num {
   width: 36px; height: 36px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: white;
-  color: #475569;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all .15s;
+  border: 1px solid #e2e8f0; border-radius: 8px;
+  background: white; color: #475569;
+  font-size: 14px; cursor: pointer; transition: all .15s;
 }
 .pag-num:hover { background: #f1f5f9; }
 .pag-num.activo {
-  background: #1e40af;
-  border-color: #1e40af;
-  color: white;
-  font-weight: 600;
+  background: #1e40af; border-color: #1e40af;
+  color: white; font-weight: 600;
 }
 .pag-ellipsis { padding: 0 4px; color: #94a3b8; line-height: 36px; }
 .prest-pag-info { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .libros-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+}
+
+@media (max-width: 768px) {
+  .libros-hero         { padding: 28px 20px; }
+  .libros-filtros-wrap { padding: 14px 20px; }
+  .libros-content      { padding: 24px 16px 40px; }
+  .libros-notif        { padding: 12px 20px; }
+  .libros-grid         { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .libros-modal        { padding: 32px 20px; }
+}
+
+@media (max-width: 480px) {
+  .libros-grid { grid-template-columns: 1fr; }
+}
