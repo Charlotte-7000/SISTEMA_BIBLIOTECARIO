@@ -327,4 +327,5 @@
 
   .admin-layout.collapsed .admin-sidebar { width: 100% !important; }
   .admin-layout.collapsed .admin-main    { margin-left: 0 !important; }
+  /* v2 */
 }
