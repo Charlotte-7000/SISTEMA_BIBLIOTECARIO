@@ -1,4 +1,3 @@
-// src/pages/admin/AdminLayout.tsx
 import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import './AdminLayout.css';
@@ -44,16 +43,14 @@ export default function AdminLayout() {
         <div className="admin-sidebar-top">
           <div className="admin-logo" onClick={() => navigate('/admin')}>
             <div className="admin-logo-icon">B</div>
-            {!collapsed && <span className="admin-logo-text">Biblioteca</span>}
+            <span className="admin-logo-text">Biblioteca</span>
           </div>
           <button className="admin-collapse-btn" onClick={() => setCollapsed(!collapsed)}>
             {collapsed ? '→' : '←'}
           </button>
         </div>
 
-        {!collapsed && (
-          <div className="admin-sidebar-label">PANEL ADMIN</div>
-        )}
+        <div className="admin-sidebar-label">PANEL ADMIN</div>
 
         <nav className="admin-nav">
           {NAV_ITEMS.map(item => (
@@ -61,17 +58,17 @@ export default function AdminLayout() {
               key={item.path}
               className={`admin-nav-item ${activo(item.path) ? 'active' : ''}`}
               onClick={() => navigate(item.path)}
-              title={collapsed ? item.label : ''}
+              title={item.label}
             >
               <span className="admin-nav-icon">{item.icon}</span>
-              {!collapsed && <span className="admin-nav-label">{item.label}</span>}
-              {!collapsed && activo(item.path) && <span className="admin-nav-dot" />}
+              <span className="admin-nav-label">{item.label}</span>
+              {activo(item.path) && <span className="admin-nav-dot" />}
             </button>
           ))}
         </nav>
 
         <div className="admin-sidebar-footer">
-          {!collapsed && usuario && (
+          {usuario && (
             <div className="admin-user-info">
               <div className="admin-user-avatar">
                 {usuario.usuario_nombre[0]}
@@ -88,7 +85,7 @@ export default function AdminLayout() {
             title="Cerrar sesión"
           >
             <span>⏻</span>
-            {!collapsed && <span>Salir</span>}
+            <span>Salir</span>
           </button>
         </div>
       </aside>

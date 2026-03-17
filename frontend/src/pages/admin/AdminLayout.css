@@ -220,106 +220,109 @@
   margin-left: var(--admin-sidebar-w-col);
 }
 
-
 /* ════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE TABLET (768px - 1024px)
    ════════════════════════════════════════════ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .admin-sidebar { width: var(--admin-sidebar-w-col); }
+  .admin-main    { margin-left: var(--admin-sidebar-w-col); }
 
-/* ── Tablet (≤ 1024px): sidebar se colapsa automáticamente ── */
-@media (max-width: 1024px) {
-  .admin-sidebar {
-    width: var(--admin-sidebar-w-col);
-  }
-  .admin-main {
-    margin-left: var(--admin-sidebar-w-col);
-  }
-
-  /* Ocultar textos y botón de colapso manual */
   .admin-logo-text,
   .admin-sidebar-label,
   .admin-nav-label,
   .admin-nav-dot,
   .admin-user-details,
-  .admin-collapse-btn {
-    display: none;
-  }
+  .admin-collapse-btn { display: none; }
 
-  /* Centrar items */
   .admin-nav-item   { justify-content: center; padding: 10px; }
   .admin-logo       { justify-content: center; }
   .admin-user-info  { justify-content: center; }
   .admin-logout-btn { justify-content: center; padding: 9px; }
 
-  /* Fijar el ancho aunque esté en clase collapsed */
   .admin-layout.collapsed .admin-sidebar { width: var(--admin-sidebar-w-col); }
   .admin-layout.collapsed .admin-main    { margin-left: var(--admin-sidebar-w-col); }
 }
 
-/* ── Móvil (≤ 767px): sidebar → barra de navegación inferior ── */
+/* ════════════════════════════════════════════
+   RESPONSIVE MÓVIL (≤ 767px)
+   ════════════════════════════════════════════ */
 @media (max-width: 767px) {
 
   .admin-layout { flex-direction: column; }
 
-  /* Sidebar pasa a barra fija inferior */
+  /* Sidebar → barra fija ABAJO */
   .admin-sidebar {
     width: 100% !important;
-    height: 60px;
-    top: auto; bottom: 0; left: 0; right: 0;
-    flex-direction: row;
+    height: 60px !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    flex-direction: row !important;
     border-right: none;
     border-top: 1px solid var(--admin-border);
+    overflow: visible;
   }
 
   /* Ocultar secciones verticales */
   .admin-sidebar-top,
   .admin-sidebar-label,
-  .admin-sidebar-footer { display: none; }
+  .admin-sidebar-footer { display: none !important; }
 
   /* Nav horizontal */
   .admin-nav {
-    flex-direction: row;
-    padding: 0; gap: 0;
-    overflow-x: auto; overflow-y: visible;
+    flex-direction: row !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow-x: auto;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     align-items: stretch;
     width: 100%;
+    height: 60px;
   }
 
   .admin-nav-item {
     flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 3px;
-    padding: 6px 4px;
-    border-radius: 0;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 3px !important;
+    padding: 6px 4px !important;
+    border-radius: 0 !important;
     min-width: 56px;
+    height: 100%;
     border-top: 2px solid transparent;
+    white-space: normal;
   }
 
-  .admin-nav-icon { font-size: 20px; }
+  .admin-nav-icon { font-size: 20px !important; }
 
-  /* Mostrar etiqueta debajo del icono */
   .admin-nav-label {
     display: block !important;
-    font-size: 10px;
-    line-height: 1;
-    flex: none;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    flex: none !important;
+    color: var(--admin-muted);
   }
 
-  .admin-nav-dot { display: none; }
+  .admin-nav-dot { display: none !important; }
 
   .admin-nav-item.active {
-    background: var(--admin-accent-soft);
-    color: #fff;
-    border-top-color: var(--admin-accent);
+    background: var(--admin-accent-soft) !important;
+    color: #fff !important;
+    border-top-color: var(--admin-accent) !important;
   }
 
-  /* Main: sin margen lateral, espacio para la barra inferior */
+  .admin-nav-item.active .admin-nav-label {
+    color: #fff !important;
+  }
+
+  /* Main con espacio para la barra inferior */
   .admin-main {
     margin-left: 0 !important;
-    padding-bottom: 60px;
-    min-height: calc(100vh - 60px);
+    padding-bottom: 60px !important;
+    min-height: calc(100vh - 60px) !important;
   }
 
   .admin-layout.collapsed .admin-sidebar { width: 100% !important; }
