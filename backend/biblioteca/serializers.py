@@ -13,14 +13,15 @@ class RegistroSerializer(serializers.ModelSerializer):
         model  = Usuario
         fields = [
             'usuario_nombre', 'usuario_aPaterno', 'usuario_aMaterno',
-            'matricula_id', 'usuario_password',
+            'matricula_id', 'usuario_password', 'usuario_correo', # <-- AGREGADO AQUÍ
         ]
         extra_kwargs = {'usuario_password': {'write_only': True}}
 
     def create(self, validated_data):
+        # La contraseña se encripta aquí
         validated_data['usuario_password'] = make_password(validated_data['usuario_password'])
+        # El correo ya viene en validated_data, super().create se encarga de guardarlo
         return super().create(validated_data)
-
 
 class LoginSerializer(serializers.Serializer):
     matricula_id     = serializers.CharField()

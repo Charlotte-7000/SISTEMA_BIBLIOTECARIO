@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import timedelta
 
 # ─────────────────────────────────────────
 # Constantes globales
@@ -18,6 +19,7 @@ class Usuario(models.Model):
     usuario_nombre          = models.CharField(max_length=100)
     usuario_aPaterno        = models.CharField(max_length=100)
     usuario_aMaterno        = models.CharField(max_length=100, blank=True, default='')
+    usuario_correo = models.EmailField(max_length=255, unique=True, null=True, blank=True)
     usuario_password        = models.CharField(max_length=255)
     usuario_rol             = models.CharField(max_length=20, choices=ROL_CHOICES, default='usuario')
     usuario_bloqueado_hasta = models.DateField(null=True, blank=True)
@@ -56,6 +58,18 @@ class Libro(models.Model):
         db_table = 'libros'
 
 
+
+
+def calcular_fecha_habil(fecha_inicio, dias_plazo):
+    fecha_final = fecha_inicio
+    dias_contados = 0
+    while dias_contados < dias_plazo:
+        fecha_final += timedelta(days=1)
+        # weekday() devuelve 5 para Sábado y 6 para Domingo
+        if fecha_final.weekday() < 5:
+            dias_contados += 1
+    return fecha_final
+
 class Prestamo(models.Model):
     ESTATUS_CHOICES = [
         ('Activo',   'Activo'),
@@ -71,10 +85,19 @@ class Prestamo(models.Model):
     prestamo_estatus                = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='Activo')
     prestamo_dias_plazo             = models.IntegerField(null=True, blank=True)
 
+    # EL MÉTODO SAVE VA AQUÍ ABAJO
+    def save(self, *args, **kwargs):
+        # Calculamos la fecha solo si el objeto es nuevo (no tiene ID aún)
+        # o si la fecha de entrega esperada aún no ha sido asignada.
+        if not self.prestamo_id and self.prestamo_dias_plazo and self.prestamo_fecha_salida:
+            self.prestamo_fecha_entrega_esperada = calcular_fecha_habil(
+                self.prestamo_fecha_salida, 
+                self.prestamo_dias_plazo
+            )
+        super().save(*args, **kwargs)
+
     class Meta:
         db_table = 'prestamos'
-
-
 class Apartado(models.Model):
     ESTATUS_CHOICES = [
         ('Pendiente',  'Pendiente'),
