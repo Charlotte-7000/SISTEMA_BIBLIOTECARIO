@@ -61,11 +61,19 @@ export default function Prestamos() {
 
   const colorBox  = (d: number) => d === 0 ? 'rojo' : d <= 2 ? 'amarillo' : 'verde';
   const colorPill = (p: Prestamo) =>
-    p.prestamo_estatus === 'Vencido' ? 'vencido' :
-    p.prestamo_estatus === 'Devuelto' ? 'devuelto' : 'activo';
+  p.prestamo_estatus === 'Vencido' ? 'vencido' :
+  p.prestamo_estatus === 'Devuelto' ? 'devuelto' :
+  (p.prestamo_estatus as string) === 'Rechazado' ? 'vencido' :
+  (p.prestamo_estatus as string) === 'Solicitado' ? 'solicitado' : 'activo'; 
 
-  const activos   = prestamos.filter(p => p.prestamo_estatus === 'Activo');
-  const historial = prestamos.filter(p => p.prestamo_estatus !== 'Activo');
+  // Préstamos que son responsabilidad actual del usuario.
+  const activos = prestamos.filter(p =>
+    p.prestamo_estatus === 'Activo' ||
+    p.prestamo_estatus === 'Vencido' ||
+    (p.prestamo_estatus as string) === 'Solicitado'
+  );
+
+  const historial = prestamos.filter(p => p.prestamo_estatus === 'Devuelto' || (p.prestamo_estatus as string) === 'Rechazado');
   const multasAct = multas.filter(m => m.multa_estatus === 'Activa');
 
   const totalPaginas    = Math.ceil(historial.length / POR_PAGINA);

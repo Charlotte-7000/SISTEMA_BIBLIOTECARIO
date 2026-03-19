@@ -399,3 +399,32 @@
   .aprest-pg-btn { padding: 6px 10px; font-size: 12px; }
   .aprest-pg-num { width: 30px; height: 30px; font-size: 12px; }
 }
+
+
+/* Botón Entregar (Verde sutil como Devolver) */
+.aprest-btn-entregar {
+  padding: 5px 12px; border-radius: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: none; color: #10b981;
+  font-size: 12px; cursor: pointer;
+  font-family: sans-serif; transition: all 0.15s;
+  white-space: nowrap; font-weight: 600;
+}
+.aprest-btn-entregar:hover { 
+  background: rgba(16, 185, 129, 0.1); 
+  border-color: #10b981;
+}
+
+/* Botón Rechazar (Rojo sutil) */
+.aprest-btn-rechazar {
+  padding: 5px 12px; border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: none; color: #ef4444;
+  font-size: 12px; cursor: pointer;
+  font-family: sans-serif; transition: all 0.15s;
+  white-space: nowrap; font-weight: 600;
+}
+.aprest-btn-rechazar:hover { 
+  background: rgba(239, 68, 68, 0.1); 
+  border-color: #ef4444;
+}

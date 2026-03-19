@@ -72,9 +72,11 @@ def calcular_fecha_habil(fecha_inicio, dias_plazo):
 
 class Prestamo(models.Model):
     ESTATUS_CHOICES = [
+        ('Solicitado', 'Solicitado'),
         ('Activo',   'Activo'),
         ('Devuelto', 'Devuelto'),
         ('Vencido',  'Vencido'),
+        ('Rechazado', 'Rechazado'),
     ]
     prestamo_id                     = models.AutoField(primary_key=True)
     usuario                         = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
@@ -104,6 +106,7 @@ class Apartado(models.Model):
         ('Asignado',   'Asignado'),
         ('Cancelado',  'Cancelado'),
         ('Convertido', 'Convertido'),
+        ('Rechazado',  'Rechazado'),
     ]
     apartado_id                    = models.AutoField(primary_key=True)
     usuario                        = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')

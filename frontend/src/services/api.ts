@@ -60,9 +60,24 @@ export interface Prestamo {
   prestamo_fecha_salida: string;
   prestamo_fecha_entrega_esperada: string;
   prestamo_fecha_devolucion_real: string | null;
-  prestamo_estatus: 'Activo' | 'Devuelto' | 'Vencido';
+  // Actualizamos los strings permitidos:
+  prestamo_estatus: 'Solicitado' | 'Activo' | 'Devuelto' | 'Vencido' | 'Rechazado';
   prestamo_dias_plazo: number | null;
   dias_retraso: number;
+  // Agregamos estos para que no marquen error en la tabla admin
+  usuario_nombre?: string; 
+  matricula_id?: string;
+}
+
+// --- ADMIN PRÉSTAMOS ---
+export async function actualizarPrestamoAdmin(prestamo_id: number, accion?: 'aceptar' | 'rechazar') {
+  const r = await fetchAuth(`${BASE}/admin/prestamos/${prestamo_id}/`, {
+    method: 'PATCH',
+    body: accion ? JSON.stringify({ accion }) : undefined,
+  });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.error || 'Error al actualizar el préstamo');
+  return d;
 }
 
 export interface Apartado {
